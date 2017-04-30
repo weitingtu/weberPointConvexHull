@@ -1,16 +1,20 @@
 #include "mainwindow.h"
 #include "panel.h"
+#include "inputmanager.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QDockWidget>
 #include <QPushButton>
 #include <QMenuBar>
 #include <QAction>
+#include <QVector>
+#include <QPointF>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
     _view_menu(nullptr),
     _clear_act(nullptr),
+    _generate_act(nullptr),
     _zoom_in_act(nullptr),
     _zoom_out_act(nullptr),
     _zoom_fit_act(nullptr),
@@ -52,6 +56,8 @@ void MainWindow::_create_actions()
 {
     _clear_act   = new QAction(tr("&Clear"), this);
     connect(_clear_act, SIGNAL(triggered(bool)), this, SLOT(_clear()));
+    _generate_act = new QAction(tr("&Generate"), this);
+    connect(_generate_act, SIGNAL(triggered(bool)), this, SLOT(_clear()));
 
     _zoom_in_act      = new QAction(tr("Zoom in"), this);
     _zoom_in_act->setShortcut(tr("Z"));
@@ -80,11 +86,27 @@ void MainWindow::_create_menus()
 void MainWindow::_connect_panel()
 {
     connect(_panel->get_clear_button(), SIGNAL(clicked(bool)), this, SLOT(_clear()));
+    connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
 }
 
 void MainWindow::_clear()
 {
     _scene->clear();
+}
+
+void MainWindow::_generate()
+{
+    _clear();
+    get_input_manager().generate(_panel->get_input_size());
+
+    const QVector<QPointF>& inputs = get_input_manager().get_inputs();
+    for(int i = 0; i < inputs.size(); ++i)
+    {
+        const double rad = 1;
+        double x = inputs[i].x();
+        double y = inputs[i].y();
+        _scene->addEllipse(x - rad, y - rad, rad * 2, rad * 2);
+    }
 }
 
 void MainWindow::_zoom_in()
