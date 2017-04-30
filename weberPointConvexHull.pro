@@ -28,4 +28,5 @@ SOURCES += main.cpp\
     panel.cpp
 
 HEADERS  += mainwindow.h \
-    panel.h
+    panel.h \
+    enum.h

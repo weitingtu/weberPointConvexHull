@@ -27,6 +27,9 @@ QGroupBox* Panel::_createInputGroup()
     QRadioButton *radio1 = new QRadioButton(tr("&Random"));
     QRadioButton *radio2 = new QRadioButton(tr("&Manual"));
 
+    connect(radio1, SIGNAL(toggled(bool)), this, SLOT(_random_input(bool)));
+    connect(radio2, SIGNAL(toggled(bool)), this, SLOT(_manual_input(bool)));
+
     radio1->setChecked(true);
 
     QVBoxLayout *vbox = new QVBoxLayout;
@@ -43,4 +46,20 @@ QGroupBox* Panel::_createInputGroup()
 int Panel::get_input_size() const
 {
     return _input_size->value();
+}
+
+void Panel::_random_input( bool checked ) const
+{
+    if( checked )
+    {
+        emit mode_changed( MODE::RANDOM_INPUT);
+    }
+}
+
+void Panel::_manual_input( bool checked ) const
+{
+    if( checked )
+    {
+        emit mode_changed( MODE::MANUAL_INPUT);
+    }
 }
