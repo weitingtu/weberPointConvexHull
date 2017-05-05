@@ -13,8 +13,8 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _convex_hull(new QPushButton(tr("&ConvexHull"), this))
 {
     _input_size->setMinimum(0);
-    _input_size->setMaximum(100);
-    _input_size->setValue(2000);
+    _input_size->setMaximum(2000);
+    _input_size->setValue(100);
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox->addWidget(_clear);
     vbox->addWidget(_createInputGroup());
