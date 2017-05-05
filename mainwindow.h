@@ -24,6 +24,7 @@ private slots:
     void _clear();
     void _generate();
     void _hexagoanl();
+    void _convex_hull();
     void _zoom_in();
     void _zoom_out();
     void _zoom_fit();

@@ -18,6 +18,7 @@ public:
     int get_input_size() const;
     QPushButton* get_generate_button() const { return _generate; }
     QPushButton* get_hex_button() const { return _hexagonal; }
+    QPushButton* get_convex_hull_button() const { return _convex_hull; }
 
 signals:
     void mode_changed(MODE m) const;
@@ -33,6 +34,7 @@ private:
     QSpinBox*    _input_size;
     QPushButton* _generate;
     QPushButton* _hexagonal;
+    QPushButton* _convex_hull;
 };
 
 #endif // PANEL_H

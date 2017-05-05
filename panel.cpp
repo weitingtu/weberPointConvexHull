@@ -9,7 +9,8 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _clear(new QPushButton(tr("&Clear"), this)),
     _input_size(new QSpinBox(this)),
     _generate(new QPushButton(tr("&Generate"), this)),
-    _hexagonal(new QPushButton(tr("&Hexagonal"), this))
+    _hexagonal(new QPushButton(tr("&Hexagonal"), this)),
+    _convex_hull(new QPushButton(tr("&ConvexHull"), this))
 {
     _input_size->setMinimum(0);
     _input_size->setMaximum(100);
@@ -18,6 +19,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_clear);
     vbox->addWidget(_createInputGroup());
     vbox->addWidget(_hexagonal);
+    vbox->addWidget(_convex_hull);
     vbox->addStretch(1);
     setLayout(vbox);
 }

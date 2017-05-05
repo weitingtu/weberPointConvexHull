@@ -90,6 +90,7 @@ void MainWindow::_connect_panel()
     connect(_panel->get_clear_button(), SIGNAL(clicked(bool)), this, SLOT(_clear()));
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
     connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
+    connect(_panel->get_convex_hull_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull()));
     connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
@@ -113,11 +114,26 @@ void MainWindow::_generate()
 void MainWindow::_hexagoanl()
 {
     get_input_manager().hexagonal();
-    _scene->addRect(get_input_manager().get_boundary());
+    _scene->addRect(get_input_manager().get_boundary(), QPen(Qt::red, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
     const QVector<QPointF>& inputs = get_input_manager().get_hexs();
     for(int i = 0; i < inputs.size(); ++i)
     {
         _scene->add_point(inputs[i], QPen(QColor(Qt::gray)));
+    }
+}
+
+void MainWindow::_convex_hull()
+{
+    get_input_manager().convex_hull();
+    QVector<QPointF> convex_hull = get_input_manager().get_convex_hull();
+    if(convex_hull.empty())
+    {
+        return;
+    }
+    convex_hull.push_back(convex_hull.first());
+    for(int i = 0; i < convex_hull.size() - 1; ++i)
+    {
+        _scene->addLine(QLineF(convex_hull[i], convex_hull[i + 1]));
     }
 }
 
