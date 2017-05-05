@@ -10,9 +10,9 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _input_size(new QSpinBox(this)),
     _generate(new QPushButton(tr("&Generate"), this))
 {
-    _input_size->setValue(20);
     _input_size->setMinimum(0);
     _input_size->setMaximum(100);
+    _input_size->setValue(2000);
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox->addWidget(_clear);
     vbox->addWidget(_createInputGroup());

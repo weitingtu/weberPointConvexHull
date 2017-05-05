@@ -17,6 +17,7 @@ public:
 
     void clear();
     void generate(int size);
+    void hexagonal();
 
     const QVector<QPointF>& get_inputs() const { return _inputs; }
 
