@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <cmath>
 
-static const int _default_width(600);
-static const int _default_height(300);
+static const int _default_width(1280);
+static const int _default_height(800);
 
 InputManager::InputManager() :
     _width(_default_width),
