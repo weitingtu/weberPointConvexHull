@@ -49,7 +49,7 @@ QVector<QPointF> _hexagonal(const QRectF &rect)
     double a = h / std::sqrt(3);
     double width  = rect.width();
     double height = rect.height();
-    int x_ratio  = width / a + 1;
+    int x_ratio  = width / a;
     int y_ratio  = height / h;
 
     QVector<QPointF> points;
