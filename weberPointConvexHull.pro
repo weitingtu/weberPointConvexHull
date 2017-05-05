@@ -26,9 +26,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     panel.cpp \
-    inputmanager.cpp
+    inputmanager.cpp \
+    scene.cpp
 
 HEADERS  += mainwindow.h \
     panel.h \
     enum.h \
-    inputmanager.h
+    inputmanager.h \
+    scene.h

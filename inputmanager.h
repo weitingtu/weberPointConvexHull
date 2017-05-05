@@ -15,8 +15,12 @@ public:
         return inst;
     }
 
+    double get_width() const { return _width; }
+    double get_height() const { return _height; }
+
     void clear();
     void generate(int size);
+    void add_point(const QPointF& p) { _inputs.push_back(p); }
     void hexagonal();
 
     const QVector<QPointF>& get_inputs() const { return _inputs; }

@@ -7,6 +7,7 @@ class QGraphicsScene;
 class QGraphicsView;
 class Panel;
 class QDockWidget;
+class Scene;
 
 class MainWindow : public QMainWindow
 {
@@ -39,7 +40,7 @@ private:
     QAction*        _zoom_in_act;
     QAction*        _zoom_out_act;
     QAction*        _zoom_fit_act;
-    QGraphicsScene* _scene;
+    Scene*          _scene;
     QGraphicsView*  _view;
     Panel*          _panel;
     QDockWidget*    _dock;

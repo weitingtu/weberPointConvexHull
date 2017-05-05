@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "panel.h"
 #include "inputmanager.h"
+#include "scene.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QDockWidget>
@@ -18,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _zoom_in_act(nullptr),
     _zoom_out_act(nullptr),
     _zoom_fit_act(nullptr),
-    _scene(new QGraphicsScene(this)),
+    _scene(new Scene(this)),
     _view(new QGraphicsView(_scene, this)),
     _panel(new Panel(this)),
     _dock(new QDockWidget(tr("Control Panel"), this))
@@ -87,6 +88,7 @@ void MainWindow::_connect_panel()
 {
     connect(_panel->get_clear_button(), SIGNAL(clicked(bool)), this, SLOT(_clear()));
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
+    connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
 void MainWindow::_clear()
@@ -102,10 +104,7 @@ void MainWindow::_generate()
     const QVector<QPointF>& inputs = get_input_manager().get_inputs();
     for(int i = 0; i < inputs.size(); ++i)
     {
-        const double rad = 1;
-        double x = inputs[i].x();
-        double y = inputs[i].y();
-        _scene->addEllipse(x - rad, y - rad, rad * 2, rad * 2);
+        _scene->add_point(inputs[i]);
     }
 }
 

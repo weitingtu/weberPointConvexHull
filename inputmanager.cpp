@@ -23,7 +23,6 @@ void InputManager::generate(int size)
 
 void InputManager::hexagonal()
 {
-
 }
 
 void InputManager::clear()
