@@ -1,5 +1,6 @@
 #include "inputmanager.h"
 #include <stdlib.h>
+#include <cmath>
 
 static const int _default_width(600);
 static const int _default_height(300);
