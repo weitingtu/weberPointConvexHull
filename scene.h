@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "enum.h"
+#include <QPen>
 #include <QGraphicsScene>
 #include <QPointF>
 #include <QVector>
@@ -17,7 +18,7 @@ public:
     void adjust_texts(int size);
 
     void initialize();
-    void add_point(const QPointF& p);
+    void add_point(const QPointF& p, const QPen &pen = QPen());
 
 signals:
 

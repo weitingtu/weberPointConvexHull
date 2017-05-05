@@ -46,12 +46,12 @@ void Scene::initialize()
     setSceneRect(0, 0, width, height);
 }
 
-void Scene::add_point(const QPointF& p)
+void Scene::add_point(const QPointF& p,  const QPen &pen )
 {
     const double rad = 1;
     double x = p.x();
     double y = p.y();
-    addEllipse(x - rad, y - rad, rad * 2, rad * 2);
+    addEllipse(x - rad, y - rad, rad * 2, rad * 2, pen);
 }
 
 void Scene::set_mode( MODE m)

@@ -10,6 +10,7 @@
 #include <QAction>
 #include <QVector>
 #include <QPointF>
+#include <QPen>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
@@ -88,6 +89,7 @@ void MainWindow::_connect_panel()
 {
     connect(_panel->get_clear_button(), SIGNAL(clicked(bool)), this, SLOT(_clear()));
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
+    connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
     connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
@@ -105,6 +107,17 @@ void MainWindow::_generate()
     for(int i = 0; i < inputs.size(); ++i)
     {
         _scene->add_point(inputs[i]);
+    }
+}
+
+void MainWindow::_hexagoanl()
+{
+    get_input_manager().hexagonal();
+    _scene->addRect(get_input_manager().get_boundary());
+    const QVector<QPointF>& inputs = get_input_manager().get_hexs();
+    for(int i = 0; i < inputs.size(); ++i)
+    {
+        _scene->add_point(inputs[i], QPen(QColor(Qt::gray)));
     }
 }
 
