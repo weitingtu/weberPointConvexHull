@@ -47,8 +47,8 @@ QVector<QPointF> _hexagonal(const QRectF &rect)
     double a = h / std::sqrt(3);
     double width  = rect.width();
     double height = rect.height();
-    int x_ratio  = (width  + a + 1 ) / a;
-    int y_ratio  = (height + h + 1 ) / h;
+    int x_ratio  = width / a + 1;
+    int y_ratio  = height / h;
 
     QVector<QPointF> points;
     for(int i = 0; i <  2 * y_ratio + 1; ++i)
@@ -64,8 +64,8 @@ QVector<QPointF> _hexagonal(const QRectF &rect)
                 }
                 shift = a / 2;
             }
-            double x = j * a + shift;
-            double y = i * h / 2;
+            double x = j * a + shift + rect.x();
+            double y = i * h / 2 + rect.y();
             points.push_back(QPointF(x, y));
         }
     }
