@@ -7,6 +7,7 @@ class QGraphicsScene;
 class QGraphicsView;
 class Panel;
 class QDockWidget;
+class Scene;
 
 class MainWindow : public QMainWindow
 {
@@ -22,6 +23,8 @@ public:
 private slots:
     void _clear();
     void _generate();
+    void _hexagoanl();
+    void _convex_hull();
     void _zoom_in();
     void _zoom_out();
     void _zoom_fit();
@@ -39,7 +42,7 @@ private:
     QAction*        _zoom_in_act;
     QAction*        _zoom_out_act;
     QAction*        _zoom_fit_act;
-    QGraphicsScene* _scene;
+    Scene*          _scene;
     QGraphicsView*  _view;
     Panel*          _panel;
     QDockWidget*    _dock;

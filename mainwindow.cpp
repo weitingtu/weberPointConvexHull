@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "panel.h"
 #include "inputmanager.h"
+#include "convexhullmanager.h"
+#include "scene.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QDockWidget>
@@ -9,6 +11,7 @@
 #include <QAction>
 #include <QVector>
 #include <QPointF>
+#include <QPen>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
@@ -18,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _zoom_in_act(nullptr),
     _zoom_out_act(nullptr),
     _zoom_fit_act(nullptr),
-    _scene(new QGraphicsScene(this)),
+    _scene(new Scene(this)),
     _view(new QGraphicsView(_scene, this)),
     _panel(new Panel(this)),
     _dock(new QDockWidget(tr("Control Panel"), this))
@@ -42,7 +45,7 @@ QSize MainWindow::minimumSizeHint() const
 
 QSize MainWindow::sizeHint() const
 {
-    return QSize(1024, 768);
+    return QSize(1600, 1050);
 }
 
 void MainWindow::_create_dock_widget()
@@ -87,11 +90,15 @@ void MainWindow::_connect_panel()
 {
     connect(_panel->get_clear_button(), SIGNAL(clicked(bool)), this, SLOT(_clear()));
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
+    connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
+    connect(_panel->get_convex_hull_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull()));
+    connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
 void MainWindow::_clear()
 {
     _scene->clear();
+    get_input_manager().clear();
 }
 
 void MainWindow::_generate()
@@ -102,11 +109,46 @@ void MainWindow::_generate()
     const QVector<QPointF>& inputs = get_input_manager().get_inputs();
     for(int i = 0; i < inputs.size(); ++i)
     {
-        const double rad = 1;
-        double x = inputs[i].x();
-        double y = inputs[i].y();
-        _scene->addEllipse(x - rad, y - rad, rad * 2, rad * 2);
+        _scene->add_point(inputs[i]);
     }
+}
+
+void MainWindow::_hexagoanl()
+{
+    get_input_manager().hexagonal();
+    _scene->addRect(get_input_manager().get_boundary(), QPen(Qt::red, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
+    const QVector<QPointF>& inputs = get_input_manager().get_hexs();
+    for(int i = 0; i < inputs.size(); ++i)
+    {
+        _scene->add_point(inputs[i], QPen(QColor(Qt::red)));
+    }
+
+    get_convex_hull_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
+}
+
+void MainWindow::_convex_hull()
+{
+    static int count = 0;
+    get_convex_hull_manager().convex_hull();
+    QVector<QPointF> convex_hull = get_convex_hull_manager().get_convex_hull();
+    if(convex_hull.empty())
+    {
+        return;
+    }
+    convex_hull.push_back(convex_hull.first());
+    for(int i = 0; i < convex_hull.size() - 1; ++i)
+    {
+        if(count % 2 == 0)
+        {
+            _scene->add_point(convex_hull[i], QPen(QColor(Qt::darkGreen)));
+        }
+        else
+        {
+            _scene->add_point(convex_hull[i], QPen(QColor(Qt::darkBlue)), 2);
+        }
+        _scene->addLine(QLineF(convex_hull[i], convex_hull[i + 1]));
+    }
+    ++count;
 }
 
 void MainWindow::_zoom_in()
