@@ -13,7 +13,7 @@ InputManager::InputManager(QObject *parent) :
     _hexs(),
     _boundary()
 {
-    std::srand(0);
+    srand(0);
 }
 
 void InputManager::generate(int size)
