@@ -27,10 +27,12 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     panel.cpp \
     inputmanager.cpp \
-    scene.cpp
+    scene.cpp \
+    convexhullmanager.cpp
 
 HEADERS  += mainwindow.h \
     panel.h \
     enum.h \
     inputmanager.h \
-    scene.h
+    scene.h \
+    convexhullmanager.h

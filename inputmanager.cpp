@@ -5,7 +5,8 @@
 static const int _default_width(1280);
 static const int _default_height(800);
 
-InputManager::InputManager() :
+InputManager::InputManager(QObject *parent) :
+    QObject(parent),
     _width(_default_width),
     _height(_default_height),
     _inputs(),

@@ -31,7 +31,7 @@ public:
     const QVector<QPointF>& get_convex_hull() const { return _convex_hull; }
 
 private:
-    InputManager();
+    InputManager(QObject *parent = 0);
 
 private:
 
