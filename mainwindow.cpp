@@ -44,7 +44,7 @@ QSize MainWindow::minimumSizeHint() const
 
 QSize MainWindow::sizeHint() const
 {
-    return QSize(1024, 768);
+    return QSize(1600, 1050);
 }
 
 void MainWindow::_create_dock_widget()

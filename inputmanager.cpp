@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <cmath>
 
-static const int _default_width(1280);
-static const int _default_height(800);
+static const int _default_width(800);
+static const int _default_height(600);
 
 InputManager::InputManager(QObject *parent) :
     QObject(parent),
