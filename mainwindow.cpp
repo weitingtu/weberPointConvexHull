@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "panel.h"
 #include "inputmanager.h"
+#include "convexhullmanager.h"
 #include "scene.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -120,12 +121,14 @@ void MainWindow::_hexagoanl()
     {
         _scene->add_point(inputs[i], QPen(QColor(Qt::gray)));
     }
+
+    get_convex_hull_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
 }
 
 void MainWindow::_convex_hull()
 {
-    get_input_manager().convex_hull();
-    QVector<QPointF> convex_hull = get_input_manager().get_convex_hull();
+    get_convex_hull_manager().convex_hull();
+    QVector<QPointF> convex_hull = get_convex_hull_manager().get_convex_hull();
     if(convex_hull.empty())
     {
         return;

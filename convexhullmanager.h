@@ -15,6 +15,7 @@ public:
         return inst;
     }
 
+    void set_points(const QVector<QPointF>& points) { _points = points; }
     void convex_hull();
 
     const QVector<QPointF>& get_convex_hull() const { return _convex_hull; }
@@ -24,6 +25,7 @@ private:
 
 private:
 
+    QVector<QPointF> _points;
     QVector<QPointF> _convex_hull;
 };
 
