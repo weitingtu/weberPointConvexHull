@@ -3,6 +3,8 @@
 ConvexHullManager::ConvexHullManager(QObject *parent):
     QObject(parent),
     _points(),
+    _group_idx(),
+    _group(),
     _convex_hull()
 {
 }
@@ -28,20 +30,37 @@ int orientation(QPointF p, QPointF q, QPointF r)
 }
 
 // Prints convex hull of a set of n points.
-QVector<QPointF> _get_convex_hull(QVector<QPointF> points)
+QVector<QPointF> _jarvis_convex_hull(const QVector<QPointF>& all_points, int idx, QVector<int>& group_idx )
 {
+    QVector<QPointF> points;
+    QVector<int>     points_idx;
+    for(int i = 0; i < all_points.size();++i)
+    {
+        if(group_idx[i] < 0)
+        {
+            points.push_back(all_points[i]);
+            points_idx.push_back(i);
+        }
+    }
     // Initialize Result
     QVector<QPointF> hull;
+    QVector<int>     hull_idx;
 
     // There must be at least 3 points
     if (points.size() < 3)
+    {
         return hull;
+    }
 
     // Find the leftmost point
     int l = 0;
     for (int i = 1; i < points.size(); i++)
+    {
         if (points[i].x() < points[l].x())
+        {
             l = i;
+        }
+    }
 
     // Start from leftmost point, keep moving counterclockwise
     // until reach the start point again.  This loop runs O(h)
@@ -51,6 +70,7 @@ QVector<QPointF> _get_convex_hull(QVector<QPointF> points)
     {
         // Add current point to result
         hull.push_back(points[p]);
+        hull_idx.push_back(p);
 
         // Search for a point 'q' such that orientation(p, x,
         // q) is counterclockwise for all points 'x'. The idea
@@ -63,7 +83,9 @@ QVector<QPointF> _get_convex_hull(QVector<QPointF> points)
            // If i is more counterclockwise than current q, then
            // update q
            if (orientation(points[p], points[i], points[q]) == 2)
+           {
                q = i;
+           }
         }
 
         // Now q is the most counterclockwise with respect to p
@@ -73,6 +95,10 @@ QVector<QPointF> _get_convex_hull(QVector<QPointF> points)
 
     } while (p != l);  // While we don't come to first point
 
+    for(int i = 0; i <hull_idx.size(); ++i)
+    {
+        group_idx[points_idx[hull_idx[i]]] = idx;
+    }
     return hull;
 }
 
@@ -80,6 +106,13 @@ QVector<QPointF> _get_convex_hull(QVector<QPointF> points)
 
 void ConvexHullManager::convex_hull()
 {
-    _convex_hull = _get_convex_hull(_points);
+    _convex_hull = _jarvis_convex_hull(_points, _group.size(), _group_idx);
+    _group.push_back(_convex_hull);
 }
 
+void ConvexHullManager::set_points(const QVector<QPointF>& points)
+{
+    _points = points;
+    _group_idx.fill(-1, points.size());
+    _group.clear();
+}
