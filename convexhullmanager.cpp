@@ -1,4 +1,7 @@
 #include "convexhullmanager.h"
+#include <QLineF>
+#include <QRectF>
+#include <QStack>
 
 ConvexHullManager::ConvexHullManager(QObject *parent):
     QObject(parent),
@@ -22,8 +25,7 @@ namespace  {
 // 2 --> Counterclockwise
 int orientation(QPointF p, QPointF q, QPointF r)
 {
-    double val = (q.y() - p.y()) * (r.x() - q.x()) -
-              (q.x() - p.x()) * (r.y() - q.y());
+    double val = (q.y() - p.y()) * (r.x() - q.x()) - (q.x() - p.x()) * (r.y() - q.y());
 
     if (val == 0) return 0;  // colinear
     return (val > 0)? 1: 2;  // clock or counterclock wise
@@ -60,12 +62,17 @@ QVector<QPointF> _jarvis_convex_hull(const QVector<QPointF>& all_points, int idx
         {
             l = i;
         }
+        else if ((points[i].x() == points[l].x()) && points[i].y() < points[l].y())
+        {
+            l = i;
+        }
     }
 
     // Start from leftmost point, keep moving counterclockwise
     // until reach the start point again.  This loop runs O(h)
     // times where h is number of points in result or output.
-    int p = l, q;
+    int p = l;
+    int q = 0;
     do
     {
         // Add current point to result
@@ -102,11 +109,146 @@ QVector<QPointF> _jarvis_convex_hull(const QVector<QPointF>& all_points, int idx
     return hull;
 }
 
+// A globle point needed for  sorting points with reference
+// to  the first point Used in compare function of qsort()
+QPointF p0;
+
+// A utility function to find next to top in a stack
+QPointF nextToTop(QStack<QPointF>& S)
+{
+    QPointF p = S.top();
+    S.pop();
+    QPointF res = S.top();
+    S.push(p);
+    return res;
+}
+
+// A function used by library function qsort() to sort an array of
+// points with respect to the first point
+//int compare(const void *vp1, const void *vp2)
+//{
+//   Point *p1 = (Point *)vp1;
+//   Point *p2 = (Point *)vp2;
+
+//   // Find orientation
+//   int o = orientation(p0, *p1, *p2);
+//   if (o == 0)
+//     return (distSq(p0, *p2) >= distSq(p0, *p1))? -1 : 1;
+
+//   return (o == 2)? -1: 1;
+//}
+
+bool lessThan(const QPointF& p1, const QPointF& p2)
+{
+   // Find orientation
+   int o = orientation(p0, p1, p2);
+   if (o == 0)
+   {
+         return QLineF(p0, p2).length() >= QLineF(p0, p1).length();
+   }
+
+   return o == 2;
+}
+
+// Prints convex hull of a set of n points.
+QVector<QPointF> _graham_scan_convex_hull(QVector<QPointF> points)
+{
+    QVector<QPointF> hull;
+    if(points.size() < 3 )
+    {
+        return hull;
+    }
+
+   // Find the bottommost point
+   double ymin = points[0].y();
+   int min = 0;
+   for (int i = 1; i < points.size(); i++)
+   {
+     double y = points[i].y();
+
+     // Pick the bottom-most or chose the left
+     // most point in case of tie
+     if ((y < ymin) || (ymin == y && points[i].x() < points[min].x()))
+     {
+        ymin = points[i].y();
+        min = i;
+     }
+   }
+
+   // Place the bottom-most point at first position
+   std::swap(points[0], points[min]);
+
+   // Sort n-1 points with respect to the first point.
+   // A point p1 comes before p2 in sorted ouput if p2
+   // has larger polar angle (in counterclockwise
+   // direction) than p1
+   p0 = points[0];
+   std::sort(points.begin() + 1, points.end(), lessThan);
+
+   // If two or more points make same angle with p0,
+   // Remove all but the one that is farthest from p0
+   // Remember that, in above sorting, our criteria was
+   // to keep the farthest point at the end when more than
+   // one points have same angle.
+   int m = 1; // Initialize size of modified array
+   for (int i=1; i<points.size(); ++i)
+   {
+       // Keep removing i while angle of i and i+1 is same
+       // with respect to p0
+       while (i < (points.size() - 1) && orientation(p0, points[i], points[i+1]) == 0)
+       {
+          i++;
+       }
+
+
+       points[m] = points[i];
+       m++;  // Update size of modified array
+   }
+
+   // If modified array of points has less than 3 points,
+   // convex hull is not possible
+   if (m < 3)
+   {
+       return hull;
+   }
+
+   // Create an empty stack and push first three points
+   // to it.
+   QStack<QPointF> S;
+   S.push(points[0]);
+   S.push(points[1]);
+   S.push(points[2]);
+
+   // Process remaining n-3 points
+   for (int i = 3; i < m; i++)
+   {
+      // Keep removing top while the angle formed by
+      // points next-to-top, top, and points[i] makes
+      // a non-left turn
+      while (orientation(nextToTop(S), S.top(), points[i]) != 2)
+      {
+         S.pop();
+      }
+      S.push(points[i]);
+   }
+
+   // Now stack has the output points, print contents of stack
+   while (!S.empty())
+   {
+       QPointF p = S.top();
+//       cout << "(" << p.x << ", " << p.y <<")" << endl;
+       hull.push_back(p);
+       S.pop();
+   }
+   return hull;
+}
+
 }
 
 void ConvexHullManager::convex_hull()
 {
     _convex_hull = _jarvis_convex_hull(_points, _group.size(), _group_idx);
+//    _convex_hull = _graham_scan_convex_hull(_points);
     _group.push_back(_convex_hull);
 }
 

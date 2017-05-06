@@ -136,6 +136,7 @@ void MainWindow::_convex_hull()
     convex_hull.push_back(convex_hull.first());
     for(int i = 0; i < convex_hull.size() - 1; ++i)
     {
+        _scene->add_point(convex_hull[i], QPen(QColor(Qt::green)));
         _scene->addLine(QLineF(convex_hull[i], convex_hull[i + 1]));
     }
 }
