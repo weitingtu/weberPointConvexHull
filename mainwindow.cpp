@@ -119,7 +119,7 @@ void MainWindow::_hexagoanl()
     const QVector<QPointF>& inputs = get_input_manager().get_hexs();
     for(int i = 0; i < inputs.size(); ++i)
     {
-        _scene->add_point(inputs[i], QPen(QColor(Qt::gray)));
+        _scene->add_point(inputs[i], QPen(QColor(Qt::red)));
     }
 
     get_convex_hull_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
