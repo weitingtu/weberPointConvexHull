@@ -98,6 +98,7 @@ void MainWindow::_connect_panel()
 void MainWindow::_clear()
 {
     _scene->clear();
+    get_input_manager().clear();
 }
 
 void MainWindow::_generate()
@@ -127,6 +128,7 @@ void MainWindow::_hexagoanl()
 
 void MainWindow::_convex_hull()
 {
+    static int count = 0;
     get_convex_hull_manager().convex_hull();
     QVector<QPointF> convex_hull = get_convex_hull_manager().get_convex_hull();
     if(convex_hull.empty())
@@ -136,9 +138,17 @@ void MainWindow::_convex_hull()
     convex_hull.push_back(convex_hull.first());
     for(int i = 0; i < convex_hull.size() - 1; ++i)
     {
-        _scene->add_point(convex_hull[i], QPen(QColor(Qt::green)));
+        if(count % 2 == 0)
+        {
+            _scene->add_point(convex_hull[i], QPen(QColor(Qt::darkGreen)));
+        }
+        else
+        {
+            _scene->add_point(convex_hull[i], QPen(QColor(Qt::darkBlue)), 2);
+        }
         _scene->addLine(QLineF(convex_hull[i], convex_hull[i + 1]));
     }
+    ++count;
 }
 
 void MainWindow::_zoom_in()

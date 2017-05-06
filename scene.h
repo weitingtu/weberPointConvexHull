@@ -18,7 +18,7 @@ public:
     void adjust_texts(int size);
 
     void initialize();
-    void add_point(const QPointF& p, const QPen &pen = QPen());
+    void add_point(const QPointF& p, const QPen &pen = QPen(), double rad = 1);
 
 signals:
 
