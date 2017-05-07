@@ -162,9 +162,10 @@ void Decomposition::decompose()
     _decompose(t);
     int idx       = _target_idx;
     double weight = t.weight;
+    double threshold = 0.000001 * weight;
     for(int i = _triangles.size() - 3;i <_triangles.size();++i)
     {
-        if(_triangles[i].weight < weight)
+        if((_triangles[i].weight < weight) && ((weight - _triangles[i].weight) > threshold))
         {
             weight = _triangles[i].weight;
             idx = i;
