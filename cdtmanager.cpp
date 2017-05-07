@@ -140,7 +140,6 @@ void CDTManager::_set_triangles(const triangulateio& io)
         for (int j = 0; j < io.numberofcorners; j++)
         {
             int idx = io.trianglelist[i * io.numberofcorners + j];
-//            t.points[j] = QPointF(io.pointlist[idx * 2], io.pointlist[idx * 2 + 1 ]);
             t.points[j] = _points[idx];
             t.indices[j]  = idx;
         }
@@ -171,7 +170,6 @@ void CDTManager::fermat_point()
                 _graph[idx].neighbors.push_back(t.neighbors[j]);
             }
         }
-//        QPointF fermat_point = FermatPoint::CalcFermatPoint(triangles[i]);
         _graph[idx].center = QPointF((t.points[0].x() + t.points[1].x() + t.points[2].x()) / 3, (t.points[0].y() + t.points[1].y() + t.points[2].y()) / 3);
     }
 }
