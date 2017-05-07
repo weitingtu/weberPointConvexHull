@@ -44,20 +44,12 @@ void CDTManager::cdt()
 
     free(in.pointlist);
     free(in.segmentlist);
-    free(in.holelist);
-    free(in.edgelist);
 
     free(mid.pointlist);
-    free(mid.pointattributelist);
-    free(mid.pointmarkerlist);
     free(mid.trianglelist);
-    free(mid.triangleattributelist);
-    free(mid.trianglearealist);
     free(mid.neighborlist);
     free(mid.segmentlist);
-    free(mid.segmentmarkerlist);
     free(mid.edgelist);
-    free(mid.edgemarkerlist);
 }
 
 void CDTManager::_group_to_segments()

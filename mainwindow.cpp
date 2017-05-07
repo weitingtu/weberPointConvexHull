@@ -3,6 +3,7 @@
 #include "inputmanager.h"
 #include "convexhullmanager.h"
 #include "cdtmanager.h"
+#include "decomposition.h"
 #include "scene.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -167,6 +168,10 @@ void MainWindow::_cdt()
     {
         _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
     }
+//    get_decomposition().set_input(get_input_manager().get_inputs(),
+//                                  get_input_manager().get_inputs() + get_input_manager().get_hexs(),
+//                                  get_convex_hull_manager().get_points_group_idx(),
+//                                  get_cdt_manager().get_triangles());
 }
 
 void MainWindow::_decompose()

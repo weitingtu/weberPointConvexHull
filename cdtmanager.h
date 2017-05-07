@@ -49,6 +49,7 @@ private:
     struct triangulateio _create_mid() const;
     void _set_lines_by_edges(const triangulateio& io);
     void _set_triangles(const triangulateio& io);
+    void _free_memory(triangulateio &t) const;
 
     // raw data
     QVector<QPointF>           _points;
