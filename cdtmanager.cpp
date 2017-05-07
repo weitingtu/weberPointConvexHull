@@ -36,6 +36,10 @@ void CDTManager::clear()
     _source_graph.clear();
 }
 
+void CDTManager::cdt_convex_hull()
+{
+}
+
 void CDTManager::cdt()
 {
     if(_hexagonals.empty())

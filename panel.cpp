@@ -10,7 +10,8 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _input_size(new QSpinBox(this)),
     _generate(new QPushButton(tr("&Generate"), this)),
     _hexagonal(new QPushButton(tr("&Hexagonal"), this)),
-    _convex_hull(new QPushButton(tr("&ConvexHull"), this))
+    _convex_hull(new QPushButton(tr("&ConvexHull"), this)),
+    _cdt(new QPushButton(tr("&Cdt"), this))
 {
     _input_size->setMinimum(0);
     _input_size->setMaximum(2000);
@@ -20,6 +21,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_createInputGroup());
     vbox->addWidget(_hexagonal);
     vbox->addWidget(_convex_hull);
+    vbox->addWidget(_cdt);
     vbox->addStretch(1);
     setLayout(vbox);
 }

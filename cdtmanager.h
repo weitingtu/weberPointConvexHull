@@ -31,6 +31,7 @@ public:
     void add_obstacles(const QVector<QPolygonF>& obstacles) { _obstacles += obstacles; }
     void add_hexagonals(const QVector<QPointF>& points) { _hexagonals.push_back(points); }
     void clear();
+    void cdt_convex_hull();
     void cdt();
     void fermat_point();
 

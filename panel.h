@@ -19,6 +19,7 @@ public:
     QPushButton* get_generate_button() const { return _generate; }
     QPushButton* get_hex_button() const { return _hexagonal; }
     QPushButton* get_convex_hull_button() const { return _convex_hull; }
+    QPushButton* get_cdt_button() const { return _cdt; }
 
 signals:
     void mode_changed(MODE m) const;
@@ -35,6 +36,7 @@ private:
     QPushButton* _generate;
     QPushButton* _hexagonal;
     QPushButton* _convex_hull;
+    QPushButton* _cdt;
 };
 
 #endif // PANEL_H
