@@ -149,9 +149,19 @@ void Decomposition::decompose()
     {
         return;
     }
-    _decompose(get_triangle());
+    const Triangle& t = get_triangle();
+    for(int i = 0; i < 3; ++i)
+    {
+        const Triangle& tt = _triangles[t.neighbors[i]];
+        if(tt.weight < t.weight)
+        {
+            _target_idx = t.neighbors[i];
+            return;
+        }
+    }
+    _decompose(t);
     int idx       = _target_idx;
-    double weight = get_triangle().weight;
+    double weight = t.weight;
     for(int i = _triangles.size() - 3;i <_triangles.size();++i)
     {
         if(_triangles[i].weight < weight)
