@@ -139,10 +139,14 @@ void CDTManager::_set_triangles(const triangulateio& io)
             t.neighbors[j] = io.neighborlist[i * 3 + j];
         }
         t.center = QPointF((t.points[0].x() + t.points[1].x() + t.points[2].x()) / 3, (t.points[0].y() + t.points[1].y() + t.points[2].y()) / 3);
-        t.idx = 0;
+        t.idx = std::numeric_limits<int>::max();
         for(int i = 0; i < 3; ++i)
         {
-            t.idx = std::max(t.idx, _points_group_idx[t.indices[i]]);
+            if(_points_group_idx[t.indices[i]] < 0)
+            {
+                continue;
+            }
+            t.idx = std::min(t.idx, _points_group_idx[t.indices[i]]);
         }
         _triangles.push_back(t);
     }

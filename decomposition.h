@@ -17,8 +17,11 @@ public:
     }
 
     void set_input(const QVector<QPointF>& i, const QVector<QPointF>& p, const QVector<int>& idx, const QVector<Triangle>& t);
+    void initialize();
     void clear();
 
+    bool is_valid() const;
+    const Triangle& get_triangle() const { return _triangles[_target_idx]; }
 signals:
 
 public slots:
@@ -31,6 +34,7 @@ private:
     QVector<QPointF>  _points;
     QVector<int>      _points_group_idx;
     QVector<Triangle> _triangles;
+    int               _target_idx;
 };
 
 inline Decomposition& get_decomposition()
