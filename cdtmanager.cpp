@@ -148,6 +148,11 @@ void CDTManager::_set_triangles(const triangulateio& io)
         {
             t.neighbors[j] = io.neighborlist[i * 3 + j];
         }
+        t.idx = 0;
+        for(int i = 0; i < 3; ++i)
+        {
+            t.idx = std::max(t.idx, _points_group_idx[t.indices[i]]);
+        }
         _triangles.push_back(t);
     }
 }

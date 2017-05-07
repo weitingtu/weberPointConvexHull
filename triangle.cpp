@@ -3,7 +3,8 @@
 Triangle::Triangle() :
     points(),
     indices(),
-    neighbors()
+    neighbors(),
+    idx()
 {
 
 }
