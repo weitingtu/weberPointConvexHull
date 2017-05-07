@@ -101,6 +101,7 @@ void MainWindow::_clear()
 {
     _scene->clear();
     get_input_manager().clear();
+    get_cdt_manager().clear();
 }
 
 void MainWindow::_generate()
@@ -159,7 +160,7 @@ void MainWindow::_cdt()
     get_cdt_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
     get_cdt_manager().set_points_group_idx(get_convex_hull_manager().get_points_group_idx());
     get_cdt_manager().set_group_idx(get_convex_hull_manager().get_group_idx());
-    get_cdt_manager().cdt_convex_hull();
+    get_cdt_manager().cdt();
     const QVector<QLineF>& lines = get_cdt_manager().get_lines();
     for(int i = 0; i < lines.size(); ++i)
     {
