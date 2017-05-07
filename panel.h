@@ -20,6 +20,7 @@ public:
     QPushButton* get_hex_button() const { return _hexagonal; }
     QPushButton* get_convex_hull_button() const { return _convex_hull; }
     QPushButton* get_cdt_button() const { return _cdt; }
+    QPushButton* get_decompose_button() const { return _decompose; }
 
 signals:
     void mode_changed(MODE m) const;
@@ -37,6 +38,7 @@ private:
     QPushButton* _hexagonal;
     QPushButton* _convex_hull;
     QPushButton* _cdt;
+    QPushButton* _decompose;
 };
 
 #endif // PANEL_H

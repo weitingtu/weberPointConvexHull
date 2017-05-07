@@ -1,7 +1,10 @@
 #ifndef DECOMPOSITION_H
 #define DECOMPOSITION_H
 
+#include "triangle.h"
 #include <QObject>
+#include <QVector>
+#include <QPointF>
 
 class Decomposition : public QObject
 {
@@ -13,11 +16,18 @@ public:
         return inst;
     }
 
+    void set_input(const QVector<QPointF>& i, const QVector<QPointF>& p, const QVector<int>& idx, const QVector<Triangle>& t);
+
 signals:
 
 public slots:
 private:
     explicit Decomposition(QObject *parent = 0);
+private:
+    QVector<QPointF>  _inputs;
+    QVector<QPointF>  _points;
+    QVector<int>      _points_group_idx;
+    QVector<Triangle> _triangles;
 };
 
 inline Decomposition& get_decomposition()

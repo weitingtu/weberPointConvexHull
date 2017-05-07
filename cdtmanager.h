@@ -59,7 +59,6 @@ private:
     // output
     QVector<QLineF>            _lines;
     QVector<Triangle>          _triangles;
-    QVector<QVector<Triangle>> _triangles_idx;
 
     QVector<Poly>              _graph;
 };

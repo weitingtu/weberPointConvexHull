@@ -94,6 +94,7 @@ void MainWindow::_connect_panel()
     connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
     connect(_panel->get_convex_hull_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull()));
     connect(_panel->get_cdt_button(), SIGNAL(clicked(bool)), this, SLOT(_cdt()));
+    connect(_panel->get_decompose_button(), SIGNAL(clicked(bool)), this, SLOT(_decompose()));
     connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
@@ -166,6 +167,10 @@ void MainWindow::_cdt()
     {
         _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
     }
+}
+
+void MainWindow::_decompose()
+{
 }
 
 void MainWindow::_zoom_in()

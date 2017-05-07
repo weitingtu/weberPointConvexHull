@@ -4,7 +4,7 @@ Triangle::Triangle() :
     points(),
     indices(),
     neighbors(),
-    idx()
+    idx(),
+    weight()
 {
-
 }
