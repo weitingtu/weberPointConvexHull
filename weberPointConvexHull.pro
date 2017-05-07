@@ -28,11 +28,22 @@ SOURCES += main.cpp\
     panel.cpp \
     inputmanager.cpp \
     scene.cpp \
-    convexhullmanager.cpp
+    convexhullmanager.cpp \
+    cdtmanager.cpp \
+    triangle.cpp \
+    triangulation.cpp \
+    poly.cpp
 
 HEADERS  += mainwindow.h \
     panel.h \
     enum.h \
     inputmanager.h \
     scene.h \
-    convexhullmanager.h
+    convexhullmanager.h \
+    cdtmanager.h \
+    triangle.h \
+    triangulation.h \
+    poly.h
+
+DEFINES += ANSI_DECLARATORS \
+    TRILIBRARY
