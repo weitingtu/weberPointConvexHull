@@ -8,8 +8,9 @@
 ConvexHullManager::ConvexHullManager(QObject *parent):
     QObject(parent),
     _points(),
-    _group_idx(),
+    _points_group_idx(),
     _group(),
+    _group_idx(),
     _convex_hull()
 {
 }
@@ -308,9 +309,8 @@ QVector<Point> _andrew_monotone_chain_convex_hull(QVector<Point> P)
     return H;
 }
 
-QVector<QPointF> _andrew_monotone_chain_convex_hull_wrapper(const QVector<QPointF>& all_points, int idx, QVector<int>& group_idx )
+QVector<Point> _andrew_monotone_chain_convex_hull_wrapper(const QVector<QPointF>& all_points, const QVector<int>& group_idx )
 {
-    QVector<QPointF> result;
     QVector<Point> points;
     for(int i = 0; i < all_points.size(); ++i)
     {
@@ -321,30 +321,33 @@ QVector<QPointF> _andrew_monotone_chain_convex_hull_wrapper(const QVector<QPoint
     }
     if(points.size() < 3)
     {
-        return result;
+        return QVector<Point>();
     }
-    QVector<Point>   hull = _andrew_monotone_chain_convex_hull(points);
-    for(int i = 0; i < hull.size(); ++i)
-    {
-        group_idx[hull[i].idx] = idx;
-        result.push_back(QPointF(hull[i].x, hull[i].y));
-    }
-    return result;
+    return _andrew_monotone_chain_convex_hull(points);
 }
 
 }
 
 void ConvexHullManager::convex_hull()
 {
-//    _convex_hull = _jarvis_convex_hull(_points, _group.size(), _group_idx);
-    _convex_hull = _andrew_monotone_chain_convex_hull_wrapper(_points, _group.size(), _group_idx);
-//    _convex_hull = _graham_scan_convex_hull(_points);
+    QVector<Point> hull = _andrew_monotone_chain_convex_hull_wrapper(_points, _points_group_idx);
+    _convex_hull.clear();
+    QVector<int> hull_idx;
+    for(int i = 0; i < hull.size(); ++i)
+    {
+        _points_group_idx[hull[i].idx] = _group.size();
+        _convex_hull.push_back(QPointF(hull[i].x, hull[i].y));
+        hull_idx.push_back(hull[i].idx);
+    }
     _group.push_back(_convex_hull);
+    _group_idx.push_back(hull_idx);
 }
 
 void ConvexHullManager::set_points(const QVector<QPointF>& points)
 {
     _points = points;
-    _group_idx.fill(-1, points.size());
+    _points_group_idx.fill(-1, points.size());
     _group.clear();
+    _group_idx.clear();
+    _convex_hull.clear();
 }

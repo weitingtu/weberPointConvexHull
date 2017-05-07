@@ -7,6 +7,8 @@ CDTManager::CDTManager(QObject *parent) : QObject(parent),
     _obstacles(),
     _hexagonals(),
     _points(),
+    _points_group_idx(),
+    _group_idx(),
     _source_indices(),
     _obstacle_indices(),
     _hex_indices(),
@@ -25,6 +27,8 @@ void CDTManager::clear()
     _obstacles.clear();
     _hexagonals.clear();
     _points.clear();
+    _points_group_idx.clear();
+    _group_idx.clear();
     _source_indices.clear();
     _obstacle_indices.clear();
     _hex_indices.clear();
@@ -38,6 +42,38 @@ void CDTManager::clear()
 
 void CDTManager::cdt_convex_hull()
 {
+    if(_points.empty())
+    {
+        return;
+    }
+
+    _group_to_segments();
+
+    struct triangulateio in  = _create_input();
+    struct triangulateio mid = _create_mid();
+
+    char options[] = "pczAen";
+    triangulate(options, &in, &mid, (struct triangulateio *) NULL );
+
+    _set_lines_by_edges(mid);
+    _set_triangles(mid);
+
+    free(in.pointlist);
+    free(in.segmentlist);
+    free(in.holelist);
+    free(in.edgelist);
+
+    free(mid.pointlist);
+    free(mid.pointattributelist);
+    free(mid.pointmarkerlist);
+    free(mid.trianglelist);
+    free(mid.triangleattributelist);
+    free(mid.trianglearealist);
+    free(mid.neighborlist);
+    free(mid.segmentlist);
+    free(mid.segmentmarkerlist);
+    free(mid.edgelist);
+    free(mid.edgemarkerlist);
 }
 
 void CDTManager::cdt()
@@ -187,6 +223,21 @@ void CDTManager::_points_to_segments()
     }
 }
 
+void CDTManager::_group_to_segments()
+{
+    for(int i = 0; i < _group_idx.size(); ++i)
+    {
+        for(int j = 0; j < _group_idx[i].size() - 1; ++j)
+        {
+            _segments.push_back(qMakePair(_group_idx[i][j], _group_idx[i][j + 1]));
+        }
+        if(_group_idx[i].size() > 1)
+        {
+            _segments.push_back(qMakePair(_group_idx[i].back(), _group_idx[i].front()));
+        }
+    }
+}
+
 struct triangulateio CDTManager::_create_input() const
 {
     struct triangulateio in;
@@ -250,10 +301,14 @@ void CDTManager::_set_lines_by_triangles(const triangulateio& io)
 void CDTManager::_set_lines_by_edges(const triangulateio& io)
 {
     _lines.clear();
-    for (int i = 0; i < io.numberofedges; i++) {
-        int idx1 = io.edgelist[i * 2] * 2;
-        int idx2 = io.edgelist[i * 2 + 1] * 2;
-        _lines.push_back(QLineF(QPointF(io.pointlist[idx1], io.pointlist[idx1 +1]), QPointF(io.pointlist[idx2], io.pointlist[idx2 + 1])));
+    for (int i = 0; i < io.numberofedges; i++)
+    {
+        int idx1 = io.edgelist[i * 2];
+        int idx2 = io.edgelist[i * 2 + 1];
+        if((_points_group_idx[idx1] == -1)||(_points_group_idx[idx2] == -1)||(_points_group_idx[idx1] != _points_group_idx[idx2]))
+        {
+            _lines.push_back(QLineF(_points[idx1], _points[idx2]));
+        }
     }
 }
 

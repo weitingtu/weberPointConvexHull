@@ -2,6 +2,7 @@
 #include "panel.h"
 #include "inputmanager.h"
 #include "convexhullmanager.h"
+#include "cdtmanager.h"
 #include "scene.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -92,6 +93,7 @@ void MainWindow::_connect_panel()
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
     connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
     connect(_panel->get_convex_hull_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull()));
+    connect(_panel->get_cdt_button(), SIGNAL(clicked(bool)), this, SLOT(_cdt()));
     connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
@@ -149,6 +151,20 @@ void MainWindow::_convex_hull()
         _scene->addLine(QLineF(convex_hull[i], convex_hull[i + 1]));
     }
     ++count;
+}
+
+void MainWindow::_cdt()
+{
+    get_cdt_manager().clear();
+    get_cdt_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
+    get_cdt_manager().set_points_group_idx(get_convex_hull_manager().get_points_group_idx());
+    get_cdt_manager().set_group_idx(get_convex_hull_manager().get_group_idx());
+    get_cdt_manager().cdt_convex_hull();
+    const QVector<QLineF>& lines = get_cdt_manager().get_lines();
+    for(int i = 0; i < lines.size(); ++i)
+    {
+        _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
+    }
 }
 
 void MainWindow::_zoom_in()

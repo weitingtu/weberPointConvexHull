@@ -30,6 +30,9 @@ public:
     void add_sources(const QVector<QPolygonF>& sources) { _sources += sources; }
     void add_obstacles(const QVector<QPolygonF>& obstacles) { _obstacles += obstacles; }
     void add_hexagonals(const QVector<QPointF>& points) { _hexagonals.push_back(points); }
+    void set_points(const QVector<QPointF>& p) { _points = p; }
+    void set_points_group_idx(const QVector<int>& p) { _points_group_idx = p; }
+    void set_group_idx(const QVector<QVector<int> >& g) { _group_idx = g; }
     void clear();
     void cdt_convex_hull();
     void cdt();
@@ -53,6 +56,7 @@ private:
     void _poly_to_points(const QVector<QPolygonF>& poly, QVector<QPointF> &points, QVector<QVector<int> >& indices , int &idx);
     void _data_to_points();
     void _points_to_segments();
+    void _group_to_segments();
     struct triangulateio _create_input() const;
     struct triangulateio _create_mid() const;
     void _set_lines_by_triangles(const triangulateio& io);
@@ -68,6 +72,8 @@ private:
     QVector<QVector<QPointF> > _hexagonals;
 
     QVector<QPointF>           _points;
+    QVector<int>               _points_group_idx;
+    QVector<QVector<int> >     _group_idx;
     QVector<QVector<int> >     _source_indices;
     QVector<QVector<int> >     _obstacle_indices;
     QVector<QVector<int> >     _hex_indices;

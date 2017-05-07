@@ -19,7 +19,9 @@ public:
     void convex_hull();
 
     const QVector<QPointF>& get_convex_hull() const { return _convex_hull; }
-    const QVector<int>& get_group_idx() const { return _group_idx; }
+    const QVector<QVector<QPointF> >& get_group() const { return _group; }
+    const QVector<QVector<int> >&     get_group_idx() const { return _group_idx; }
+    const QVector<int>& get_points_group_idx() const { return _points_group_idx; }
 
 private:
     ConvexHullManager(QObject *parent = 0);
@@ -27,8 +29,9 @@ private:
 private:
 
     QVector<QPointF>           _points;
-    QVector<int>               _group_idx;
+    QVector<int>               _points_group_idx;
     QVector<QVector<QPointF> > _group;
+    QVector<QVector<int> >     _group_idx;
     QVector<QPointF>           _convex_hull;
 };
 
