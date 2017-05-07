@@ -103,7 +103,9 @@ void MainWindow::_clear()
 {
     _scene->clear();
     get_input_manager().clear();
+    get_convex_hull_manager().clear();
     get_cdt_manager().clear();
+    get_decomposition().clear();
 }
 
 void MainWindow::_generate()
@@ -168,10 +170,10 @@ void MainWindow::_cdt()
     {
         _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
     }
-//    get_decomposition().set_input(get_input_manager().get_inputs(),
-//                                  get_input_manager().get_inputs() + get_input_manager().get_hexs(),
-//                                  get_convex_hull_manager().get_points_group_idx(),
-//                                  get_cdt_manager().get_triangles());
+    get_decomposition().set_input(get_input_manager().get_inputs(),
+                                  get_input_manager().get_inputs() + get_input_manager().get_hexs(),
+                                  get_convex_hull_manager().get_points_group_idx(),
+                                  get_cdt_manager().get_triangles());
 }
 
 void MainWindow::_decompose()

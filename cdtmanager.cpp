@@ -8,8 +8,7 @@ CDTManager::CDTManager(QObject *parent) : QObject(parent),
     _group_idx(),
     _segments(),
     _lines(),
-    _triangles(),
-    _graph()
+    _triangles()
 {
 }
 
@@ -21,7 +20,6 @@ void CDTManager::clear()
     _segments.clear();
     _lines.clear();
     _triangles.clear();
-    _graph.clear();
 }
 
 void CDTManager::cdt()
@@ -140,6 +138,7 @@ void CDTManager::_set_triangles(const triangulateio& io)
         {
             t.neighbors[j] = io.neighborlist[i * 3 + j];
         }
+        t.center = QPointF((t.points[0].x() + t.points[1].x() + t.points[2].x()) / 3, (t.points[0].y() + t.points[1].y() + t.points[2].y()) / 3);
         t.idx = 0;
         for(int i = 0; i < 3; ++i)
         {
@@ -148,26 +147,3 @@ void CDTManager::_set_triangles(const triangulateio& io)
         _triangles.push_back(t);
     }
 }
-
-void CDTManager::fermat_point()
-{
-    _graph.clear();
-    _graph.resize(_triangles.size());
-
-    int idx = 0;
-    for( int i = 0; i < _triangles.size(); ++i, ++idx )
-    {
-        const Triangle&t = _triangles[i];
-        for(int j = 0; j < 3; ++j)
-        {
-            _graph[idx].points.push_back(t.points[j]);
-            _graph[idx].indices.push_back(t.indices[j]);
-            if(t.neighbors[j] >= 0)
-            {
-                _graph[idx].neighbors.push_back(t.neighbors[j]);
-            }
-        }
-        _graph[idx].center = QPointF((t.points[0].x() + t.points[1].x() + t.points[2].x()) / 3, (t.points[0].y() + t.points[1].y() + t.points[2].y()) / 3);
-    }
-}
-

@@ -17,6 +17,7 @@ public:
     }
 
     void set_input(const QVector<QPointF>& i, const QVector<QPointF>& p, const QVector<int>& idx, const QVector<Triangle>& t);
+    void clear();
 
 signals:
 
@@ -24,6 +25,8 @@ public slots:
 private:
     explicit Decomposition(QObject *parent = 0);
 private:
+    void _compute_weight(const QVector<QPointF>& inputs, Triangle& t) const;
+
     QVector<QPointF>  _inputs;
     QVector<QPointF>  _points;
     QVector<int>      _points_group_idx;

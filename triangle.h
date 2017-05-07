@@ -11,6 +11,7 @@ public:
     int indices[3];
     int neighbors[3];
     int idx;
+    QPointF center;
     double weight;
 };
 

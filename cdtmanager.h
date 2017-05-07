@@ -32,12 +32,9 @@ public:
     void set_group_idx(const QVector<QVector<int> >& g) { _group_idx = g; }
     void clear();
     void cdt();
-    void fermat_point();
 
     const QVector<QLineF>&   get_lines() const { return _lines; }
     const QVector<Triangle>& get_triangles() const { return _triangles; }
-
-    const QVector<Poly>&     get_graph() const { return _graph; }
 signals:
 
 public slots:
@@ -49,7 +46,6 @@ private:
     struct triangulateio _create_mid() const;
     void _set_lines_by_edges(const triangulateio& io);
     void _set_triangles(const triangulateio& io);
-    void _free_memory(triangulateio &t) const;
 
     // raw data
     QVector<QPointF>           _points;
@@ -60,8 +56,6 @@ private:
     // output
     QVector<QLineF>            _lines;
     QVector<Triangle>          _triangles;
-
-    QVector<Poly>              _graph;
 };
 
 inline CDTManager& get_cdt_manager()

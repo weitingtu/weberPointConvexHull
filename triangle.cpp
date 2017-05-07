@@ -5,6 +5,7 @@ Triangle::Triangle() :
     indices(),
     neighbors(),
     idx(),
+    center(),
     weight()
 {
 }

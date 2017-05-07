@@ -351,3 +351,12 @@ void ConvexHullManager::set_points(const QVector<QPointF>& points)
     _group_idx.clear();
     _convex_hull.clear();
 }
+
+void ConvexHullManager::clear()
+{
+    _points.clear();
+    _points_group_idx.clear();
+    _group.clear();
+    _group_idx.clear();
+    _convex_hull.clear();
+}
