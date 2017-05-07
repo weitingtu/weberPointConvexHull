@@ -8,6 +8,8 @@ class QGraphicsView;
 class Panel;
 class QDockWidget;
 class Scene;
+class Triangle;
+class QPen;
 
 class MainWindow : public QMainWindow
 {
@@ -36,6 +38,7 @@ private:
     void _create_actions();
     void _create_menus();
     void _connect_panel();
+    void _draw_triangle(const Triangle& t, const QPen& pen);
 
     QMenu*          _file_menu;
     QMenu*          _view_menu;

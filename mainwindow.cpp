@@ -14,6 +14,7 @@
 #include <QVector>
 #include <QPointF>
 #include <QPen>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
@@ -178,12 +179,41 @@ void MainWindow::_cdt()
     if(get_decomposition().is_valid())
     {
         const Triangle& t = get_decomposition().get_triangle();
-        _scene->add_point(t.center, QPen(QColor(Qt::red)));
+        _draw_triangle(t, QPen(QColor(Qt::red)));
     }
 }
 
 void MainWindow::_decompose()
 {
+    if(!get_decomposition().is_valid())
+    {
+        return;
+    }
+
+    const Triangle& prev_t = get_decomposition().get_triangle();
+
+    get_decomposition().decompose();
+
+    if(get_decomposition().is_finish())
+    {
+        QString msg = QString("Finish");
+        QMessageBox::information(this, QString(), msg);
+        return;
+    }
+
+    const Triangle& t = get_decomposition().get_triangle();
+    _draw_triangle(prev_t, QPen(QColor(Qt::darkRed)));
+    _draw_triangle(t, QPen(QColor(Qt::red)));
+}
+
+void MainWindow::_draw_triangle(const Triangle& t, const QPen& pen)
+{
+    _scene->add_point(t.center, pen);
+    for(int i = 0; i < 2; ++i)
+    {
+        _scene->addLine(QLineF(t.points[i], t.points[i + 1]), pen);
+    }
+    _scene->addLine(QLineF(t.points[2], t.points[0]), pen);
 }
 
 void MainWindow::_zoom_in()

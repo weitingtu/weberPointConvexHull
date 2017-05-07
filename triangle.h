@@ -13,6 +13,8 @@ public:
     int idx;
     QPointF center;
     double weight;
+
+    void set_center();
 };
 
 #endif // TRIANGLE_H
