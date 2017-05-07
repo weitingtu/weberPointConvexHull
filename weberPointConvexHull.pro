@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     cdtmanager.cpp \
     triangle.cpp \
     triangulation.cpp \
-    poly.cpp
+    poly.cpp \
+    decomposition.cpp
 
 HEADERS  += mainwindow.h \
     panel.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     cdtmanager.h \
     triangle.h \
     triangulation.h \
-    poly.h
+    poly.h \
+    decomposition.h
 
 DEFINES += ANSI_DECLARATORS \
     TRILIBRARY

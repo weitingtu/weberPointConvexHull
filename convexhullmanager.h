@@ -24,7 +24,7 @@ public:
     const QVector<int>& get_points_group_idx() const { return _points_group_idx; }
 
 private:
-    ConvexHullManager(QObject *parent = 0);
+    explicit ConvexHullManager(QObject *parent = 0);
 
 private:
 

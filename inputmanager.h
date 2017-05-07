@@ -29,7 +29,7 @@ public:
     const QVector<QPointF>& get_hexs() const { return _hexs; }
 
 private:
-    InputManager(QObject *parent = 0);
+    explicit InputManager(QObject *parent = 0);
 
 private:
 
