@@ -1,12 +1,14 @@
 #include "scene.h"
 #include "inputmanager.h"
+#include "triangle.h"
 #include <QGraphicsTextItem>
 #include <QGraphicsSceneMouseEvent>
 
 Scene::Scene(QObject *parent ):
     QGraphicsScene(parent),
     _mode(MODE::RANDOM_INPUT),
-    _texts()
+    _texts(),
+    _triangles()
 {
     initialize();
 }
@@ -46,11 +48,11 @@ void Scene::initialize()
     setSceneRect(0, 0, width, height);
 }
 
-void Scene::add_point(const QPointF& p,  const QPen &pen, double rad)
+QGraphicsEllipseItem* Scene::add_point(const QPointF& p,  const QPen &pen, double rad)
 {
     double x = p.x();
     double y = p.y();
-    addEllipse(x - rad, y - rad, rad * 2, rad * 2, pen);
+    return addEllipse(x - rad, y - rad, rad * 2, rad * 2, pen);
 }
 
 void Scene::set_mode( MODE m)
@@ -69,4 +71,28 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         add_point(mouseEvent->scenePos());
     }
     QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void Scene::clear_triangles()
+{
+    for(int i = 0; i < _triangles.size(); ++i)
+    {
+        removeItem(_triangles[i]);
+        delete(_triangles[i]);
+    }
+    _triangles.clear();
+}
+
+void Scene::add_triangle(const Triangle& t, const QPen& pen)
+{
+    _triangles.push_back(add_point(t.center, pen));
+    for(int i = 0; i < 2; ++i)
+    {
+        _triangles.push_back(addLine(QLineF(t.points[i], t.points[i + 1]), pen));
+    }
+    _triangles.push_back(addLine(QLineF(t.points[2], t.points[0]), pen));
+    QGraphicsTextItem* text_item = addText(QString::number(t.weight));
+    text_item->setX(t.center.x());
+    text_item->setY(t.center.y());
+    _triangles.push_back(text_item);
 }

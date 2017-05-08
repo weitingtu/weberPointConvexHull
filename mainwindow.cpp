@@ -104,6 +104,7 @@ void MainWindow::_connect_panel()
 
 void MainWindow::_clear()
 {
+    _scene->clear_triangles();
     _scene->clear();
     _cdt_display.clear();
     get_input_manager().clear();
@@ -164,11 +165,6 @@ void MainWindow::_cdt()
     get_cdt_manager().set_points_group_idx(get_convex_hull_manager().get_points_group_idx());
     get_cdt_manager().set_group_idx(get_convex_hull_manager().get_group_idx());
     get_cdt_manager().cdt();
-//    const QVector<QLineF>& lines = get_cdt_manager().get_lines();
-//    for(int i = 0; i < lines.size(); ++i)
-//    {
-//        _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
-//    }
     _init_cdt_display(get_cdt_manager().get_triangles());
     get_decomposition().set_input(get_input_manager().get_inputs(),
                                   get_input_manager().get_inputs() + get_input_manager().get_hexs(),
@@ -200,6 +196,7 @@ void MainWindow::_decompose()
         return;
     }
 
+    _scene->clear_triangles();
     const Triangle& t = get_decomposition().get_triangle();
     _draw_triangle(prev_t, QPen(QColor(Qt::darkRed)));
     _draw_triangle(t, QPen(QColor(Qt::red)));
@@ -207,6 +204,7 @@ void MainWindow::_decompose()
 
 void MainWindow::_accomplish()
 {
+    _scene->clear_triangles();
     _scene->clear();
     _draw_input();
     const Triangle& t = get_decomposition().get_triangle();
@@ -249,19 +247,36 @@ void MainWindow::_draw_cdt(int idx)
         {
             continue;
         }
-        for(int i = 0; i < 3; ++i)
+        if(points_group_idx[t.indices[0]] == points_group_idx[t.indices[1]]
+                && points_group_idx[t.indices[1]] == points_group_idx[t.indices[2]]
+                && points_group_idx[t.indices[2]] == points_group_idx[t.indices[0]])
         {
-            int idx1 = i;
-            int idx2 = i + 1;
-            if(3 <= idx2)
+            for(int i = 0; i < 3; ++i)
             {
-                idx2 = 0;
+                int idx1 = i;
+                int idx2 = i + 1;
+                if(3 <= idx2)
+                {
+                    idx2 = 0;
+                }
+                _scene->addLine(QLineF(t.points[idx1], t.points[idx2]), QPen(QColor(Qt::gray)));
             }
-            if((points_group_idx[t.indices[idx1]] == idx) && (points_group_idx[t.indices[idx2]] == idx))
+        }
+        else
+        {
+            for(int i = 0; i < 3; ++i)
             {
-                continue;
+                int idx1 = i;
+                int idx2 = i + 1;
+                if(3 <= idx2)
+                {
+                    idx2 = 0;
+                }
+                if(points_group_idx[t.indices[idx1]] != points_group_idx[t.indices[idx2]])
+                {
+                    _scene->addLine(QLineF(t.points[idx1], t.points[idx2]), QPen(QColor(Qt::gray)));
+                }
             }
-            _scene->addLine(QLineF(t.points[idx1], t.points[idx2]), QPen(QColor(Qt::gray)));
         }
     }
 }
@@ -269,12 +284,7 @@ void MainWindow::_draw_cdt(int idx)
 void MainWindow::_draw_triangle(const Triangle& t, const QPen& pen)
 {
     _draw_cdt(t.idx);
-    _scene->add_point(t.center, pen);
-    for(int i = 0; i < 2; ++i)
-    {
-        _scene->addLine(QLineF(t.points[i], t.points[i + 1]), pen);
-    }
-    _scene->addLine(QLineF(t.points[2], t.points[0]), pen);
+    _scene->add_triangle(t, pen);
 }
 
 void MainWindow::_zoom_in()
