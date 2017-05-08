@@ -38,6 +38,8 @@ private:
     void _create_actions();
     void _create_menus();
     void _connect_panel();
+    void _init_cdt_display(const QVector<Triangle>& triangles);
+    void _draw_cdt(int idx);
     void _draw_triangle(const Triangle& t, const QPen& pen);
 
     QMenu*          _file_menu;
@@ -51,6 +53,7 @@ private:
     QGraphicsView*  _view;
     Panel*          _panel;
     QDockWidget*    _dock;
+    QVector<bool>   _cdt_display;
 };
 
 #endif // MAINWINDOW_H

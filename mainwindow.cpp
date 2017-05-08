@@ -27,7 +27,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _scene(new Scene(this)),
     _view(new QGraphicsView(_scene, this)),
     _panel(new Panel(this)),
-    _dock(new QDockWidget(tr("Control Panel"), this))
+    _dock(new QDockWidget(tr("Control Panel"), this)),
+    _cdt_display()
 {
     setCentralWidget(_view);
     _create_dock_widget();
@@ -103,6 +104,7 @@ void MainWindow::_connect_panel()
 void MainWindow::_clear()
 {
     _scene->clear();
+    _cdt_display.clear();
     get_input_manager().clear();
     get_convex_hull_manager().clear();
     get_cdt_manager().clear();
@@ -166,11 +168,12 @@ void MainWindow::_cdt()
     get_cdt_manager().set_points_group_idx(get_convex_hull_manager().get_points_group_idx());
     get_cdt_manager().set_group_idx(get_convex_hull_manager().get_group_idx());
     get_cdt_manager().cdt();
-    const QVector<QLineF>& lines = get_cdt_manager().get_lines();
-    for(int i = 0; i < lines.size(); ++i)
-    {
-        _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
-    }
+//    const QVector<QLineF>& lines = get_cdt_manager().get_lines();
+//    for(int i = 0; i < lines.size(); ++i)
+//    {
+//        _scene->addLine(lines[i], QPen(QColor(Qt::gray)));
+//    }
+    _init_cdt_display(get_cdt_manager().get_triangles());
     get_decomposition().set_input(get_input_manager().get_inputs(),
                                   get_input_manager().get_inputs() + get_input_manager().get_hexs(),
                                   get_convex_hull_manager().get_points_group_idx(),
@@ -206,8 +209,52 @@ void MainWindow::_decompose()
     _draw_triangle(t, QPen(QColor(Qt::red)));
 }
 
+void MainWindow::_init_cdt_display(const QVector<Triangle>& triangles)
+{
+    int max_idx = 0;
+    for(int i = 0; i < triangles.size();++i)
+    {
+        max_idx = std::max(max_idx, triangles[i].idx);
+    }
+    _cdt_display.resize(max_idx + 1);
+    _cdt_display.fill(false);
+}
+
+void MainWindow::_draw_cdt(int idx)
+{
+    if(_cdt_display[idx])
+    {
+        return;
+    }
+    _cdt_display[idx] = true;
+    const QVector<Triangle>& triangles   = get_cdt_manager().get_triangles();
+    const QVector<int>& points_group_idx = get_convex_hull_manager().get_points_group_idx();
+    for(int i = 0; i < triangles.size(); ++i)
+    {
+        const Triangle& t = triangles[i];
+        if(t.idx != idx)
+        {
+            continue;
+        }
+        for(int i = 0; i < 3; ++i)
+        {
+            int idx1 = i;
+            int idx2 = i + 1;
+            if(3 <= idx)
+            {
+                idx2 = 0;
+            }
+            if(points_group_idx[t.indices[idx1]] != points_group_idx[t.indices[idx2]])
+            {
+                _scene->addLine(QLineF(t.points[idx1], t.points[idx2]), QPen(QColor(Qt::gray)));
+            }
+        }
+    }
+}
+
 void MainWindow::_draw_triangle(const Triangle& t, const QPen& pen)
 {
+    _draw_cdt(t.idx);
     _scene->add_point(t.center, pen);
     for(int i = 0; i < 2; ++i)
     {

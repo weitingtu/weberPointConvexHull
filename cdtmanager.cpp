@@ -37,7 +37,7 @@ void CDTManager::cdt()
     char options[] = "pczAen";
     triangulate(options, &in, &mid, (struct triangulateio *) NULL );
 
-    _set_lines_by_edges(mid);
+//    _set_lines_by_edges(mid);
     _set_triangles(mid);
 
     free(in.pointlist);
