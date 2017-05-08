@@ -198,7 +198,17 @@ void MainWindow::_decompose()
 
     _scene->clear_triangles();
     const Triangle& t = get_decomposition().get_triangle();
-    _draw_triangle(prev_t, QPen(QColor(Qt::darkRed)));
+    if(get_decomposition().get_candidate_size() == 0)
+    {
+        _draw_triangle(prev_t, QPen(QColor(Qt::darkRed)));
+    }
+    else
+    {
+        for(int i = 0; i <get_decomposition().get_candidate_size(); ++i)
+        {
+            _draw_triangle(get_decomposition().get_candidate_triangle(i), QPen(QColor(Qt::darkRed)));
+        }
+    }
     _draw_triangle(t, QPen(QColor(Qt::red)));
 }
 

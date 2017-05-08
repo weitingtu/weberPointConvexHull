@@ -24,6 +24,8 @@ public:
     bool is_valid() const;
     bool is_finish() const { return _finish; }
     const Triangle& get_triangle() const { return _triangles[_target_idx]; }
+    int get_candidate_size() const { return _candidate_idx.size(); }
+    const Triangle& get_candidate_triangle(int idx) const { return _triangles[_candidate_idx[idx]]; }
 signals:
 
 public slots:
@@ -39,6 +41,7 @@ private:
     QVector<QPointF>  _points;
     QVector<int>      _points_group_idx;
     QVector<Triangle> _triangles;
+    QVector<int>      _candidate_idx;
     int               _target_idx;
     bool              _finish;
 };

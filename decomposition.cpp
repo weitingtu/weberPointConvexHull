@@ -6,6 +6,7 @@ Decomposition::Decomposition(QObject *parent) : QObject(parent),
     _points(),
     _points_group_idx(),
     _triangles(),
+    _candidate_idx(),
     _target_idx(-1),
     _finish(false)
 {
@@ -26,6 +27,7 @@ void Decomposition::set_input(const QVector<QPointF>& i, const QVector<QPointF>&
     _points = p;
     _points_group_idx = idx;
     _triangles = t;
+    _candidate_idx.clear();
     _target_idx = -1;
     _finish = false;
 }
@@ -65,6 +67,7 @@ void Decomposition::clear()
     _points.clear();
     _points_group_idx.clear();
     _triangles.clear();
+    _candidate_idx.clear();
     _target_idx = -1;
     _finish = false;
 }
@@ -149,6 +152,7 @@ void Decomposition::decompose()
     {
         return;
     }
+    _candidate_idx.clear();
     const Triangle& t = get_triangle();
     for(int i = 0; i < 3; ++i)
     {
@@ -160,6 +164,9 @@ void Decomposition::decompose()
         }
     }
     _decompose(t);
+    _candidate_idx.push_back(_triangles.size() - 3);
+    _candidate_idx.push_back(_triangles.size() - 2);
+    _candidate_idx.push_back(_triangles.size() - 1);
     int idx       = _target_idx;
     double weight = t.weight;
     double threshold = 0.000001 * weight;
@@ -171,12 +178,14 @@ void Decomposition::decompose()
             idx = i;
         }
     }
+    std::sort(_candidate_idx.begin(), _candidate_idx.end());
     if(idx == _target_idx)
     {
         _finish = true;
     }
     else
     {
+        _candidate_idx.remove(_candidate_idx.indexOf(idx));
         _target_idx = idx;
     }
 }
