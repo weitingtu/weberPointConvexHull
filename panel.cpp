@@ -11,7 +11,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _generate(new QPushButton(tr("&Generate"), this)),
     _hexagonal(new QPushButton(tr("&Hexagonal"), this)),
     _convex_hull(new QPushButton(tr("&ConvexHull"), this)),
-    _cdt(new QPushButton(tr("&Cdt"), this)),
+    _cdt(new QPushButton(tr("&DT"), this)),
     _decompose(new QPushButton(tr("&Decompose"), this))
 {
     _input_size->setMinimum(0);
