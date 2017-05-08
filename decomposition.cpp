@@ -34,6 +34,7 @@ void Decomposition::set_input(const QVector<QPointF>& i, const QVector<QPointF>&
 
 void Decomposition::initialize()
 {
+    _candidate_idx.clear();
     int max_idx = 0;
     for(int i = 0; i <_triangles.size(); ++i)
     {
@@ -49,14 +50,17 @@ void Decomposition::initialize()
         {
             continue;
         }
+        _candidate_idx.push_back(i);
         if(t.weight < min_weight)
         {
             min_weight = t.weight;
             idx = i;
         }
     }
+    std::sort(_candidate_idx.begin(), _candidate_idx.end());
     if(idx >= 0 )
     {
+        _candidate_idx.remove(_candidate_idx.indexOf(idx));
         _target_idx = idx;
     }
 }

@@ -135,7 +135,7 @@ void MainWindow::_hexagoanl()
     const QVector<QPointF>& hexs = get_input_manager().get_hexs();
     for(int i = 0; i < hexs.size(); ++i)
     {
-        _scene->add_point(hexs[i], QPen(QColor(Qt::darkRed)));
+        _scene->add_point(hexs[i], QPen(QColor(Qt::green)));
     }
 
     get_convex_hull_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
@@ -181,6 +181,10 @@ void MainWindow::_cdt()
     get_decomposition().initialize();
     if(get_decomposition().is_valid())
     {
+        for(int i = 0; i <get_decomposition().get_candidate_size(); ++i)
+        {
+            _draw_triangle(get_decomposition().get_candidate_triangle(i), QPen(QColor(Qt::darkRed)));
+        }
         const Triangle& t = get_decomposition().get_triangle();
         _draw_triangle(t, QPen(QColor(Qt::red)));
     }
