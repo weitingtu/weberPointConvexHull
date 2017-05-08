@@ -91,8 +91,9 @@ void Scene::add_triangle(const Triangle& t, const QPen& pen)
         _triangles.push_back(addLine(QLineF(t.points[i], t.points[i + 1]), pen));
     }
     _triangles.push_back(addLine(QLineF(t.points[2], t.points[0]), pen));
-    QGraphicsTextItem* text_item = addText(QString::number(t.weight));
-    text_item->setX(t.center.x());
-    text_item->setY(t.center.y());
-    _triangles.push_back(text_item);
+    add_text(t.center, QString::number(t.weight));
+//    QGraphicsTextItem* text_item = addText(QString::number(t.weight));
+//    text_item->setX(t.center.x());
+//    text_item->setY(t.center.y());
+//    _triangles.push_back(text_item);
 }

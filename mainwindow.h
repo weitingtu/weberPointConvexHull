@@ -23,6 +23,7 @@ public:
     virtual QSize sizeHint() const override;
 
 private slots:
+    void _change_font_size(int i);
     void _clear();
     void _generate();
     void _hexagoanl();

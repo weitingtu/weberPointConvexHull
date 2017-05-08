@@ -15,6 +15,7 @@
 #include <QPointF>
 #include <QPen>
 #include <QMessageBox>
+#include <QSpinBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
@@ -92,6 +93,7 @@ void MainWindow::_create_menus()
 
 void MainWindow::_connect_panel()
 {
+    connect(_panel->get_font_size_spin_box(), SIGNAL(valueChanged(int)), this, SLOT(_change_font_size(int)));
     connect(_panel->get_clear_button(), SIGNAL(clicked(bool)), this, SLOT(_clear()));
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
     connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
@@ -102,8 +104,14 @@ void MainWindow::_connect_panel()
     connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
+void MainWindow::_change_font_size(int i)
+{
+    _scene->adjust_texts(i);
+}
+
 void MainWindow::_clear()
 {
+    _scene->clear_texts();
     _scene->clear_triangles();
     _scene->clear();
     _cdt_display.clear();
@@ -196,6 +204,7 @@ void MainWindow::_decompose()
         return;
     }
 
+    _scene->clear_texts();
     _scene->clear_triangles();
     const Triangle& t = get_decomposition().get_triangle();
     if(get_decomposition().get_candidate_size() == 0)
@@ -214,6 +223,7 @@ void MainWindow::_decompose()
 
 void MainWindow::_accomplish()
 {
+    _scene->clear_texts();
     _scene->clear_triangles();
     _scene->clear();
     _draw_input();

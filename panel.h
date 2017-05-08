@@ -14,6 +14,7 @@ class Panel : public QWidget
 public:
     explicit Panel(QWidget *parent = 0);
 
+    QSpinBox*    get_font_size_spin_box() const { return _font_size; }
     QPushButton* get_clear_button() const { return _clear; }
     int get_input_size() const;
     QPushButton* get_generate_button() const { return _generate; }
@@ -33,6 +34,7 @@ private slots:
 private:
     QGroupBox* _createInputGroup();
 
+    QSpinBox*    _font_size;
     QPushButton* _clear;
     QSpinBox*    _input_size;
     QPushButton* _generate;

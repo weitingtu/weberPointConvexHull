@@ -6,6 +6,7 @@
 #include <QRadioButton>
 
 Panel::Panel(QWidget *parent) : QWidget(parent),
+    _font_size(new QSpinBox(this)),
     _clear(new QPushButton(tr("&Clear"), this)),
     _input_size(new QSpinBox(this)),
     _generate(new QPushButton(tr("&Generate"), this)),
@@ -15,10 +16,12 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _decompose(new QPushButton(tr("&Decompose"), this)),
     _accomplish(new QPushButton(tr("&Accomplish"), this))
 {
+    _font_size->setValue(9);
     _input_size->setMinimum(0);
     _input_size->setMaximum(2000);
     _input_size->setValue(100);
     QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(_font_size);
     vbox->addWidget(_clear);
     vbox->addWidget(_createInputGroup());
     vbox->addWidget(_hexagonal);
