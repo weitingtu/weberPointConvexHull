@@ -12,7 +12,8 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _hexagonal(new QPushButton(tr("&Hexagonal"), this)),
     _convex_hull(new QPushButton(tr("&ConvexHull"), this)),
     _cdt(new QPushButton(tr("&DT"), this)),
-    _decompose(new QPushButton(tr("&Decompose"), this))
+    _decompose(new QPushButton(tr("&Decompose"), this)),
+    _accomplish(new QPushButton(tr("&Accomplish"), this))
 {
     _input_size->setMinimum(0);
     _input_size->setMaximum(2000);
@@ -24,6 +25,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_convex_hull);
     vbox->addWidget(_cdt);
     vbox->addWidget(_decompose);
+    vbox->addWidget(_accomplish);
     vbox->addStretch(1);
     setLayout(vbox);
 }
