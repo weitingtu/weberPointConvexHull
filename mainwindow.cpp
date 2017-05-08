@@ -98,6 +98,7 @@ void MainWindow::_connect_panel()
     connect(_panel->get_convex_hull_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull()));
     connect(_panel->get_cdt_button(), SIGNAL(clicked(bool)), this, SLOT(_cdt()));
     connect(_panel->get_decompose_button(), SIGNAL(clicked(bool)), this, SLOT(_decompose()));
+    connect(_panel->get_accomplish_button(), SIGNAL(clicked(bool)), this, SLOT(_accomplish()));
     connect(_panel, SIGNAL(mode_changed(MODE)), _scene, SLOT(set_mode(MODE)));
 }
 
@@ -115,12 +116,7 @@ void MainWindow::_generate()
 {
     _clear();
     get_input_manager().generate(_panel->get_input_size());
-
-    const QVector<QPointF>& inputs = get_input_manager().get_inputs();
-    for(int i = 0; i < inputs.size(); ++i)
-    {
-        _scene->add_point(inputs[i]);
-    }
+    _draw_input();
 }
 
 void MainWindow::_hexagoanl()
@@ -209,6 +205,23 @@ void MainWindow::_decompose()
     _draw_triangle(t, QPen(QColor(Qt::red)));
 }
 
+void MainWindow::_accomplish()
+{
+    _scene->clear();
+    _draw_input();
+    const Triangle& t = get_decomposition().get_triangle();
+    _scene->add_point(t.center, QPen(QColor(Qt::red)));
+}
+
+void MainWindow::_draw_input()
+{
+    const QVector<QPointF>& inputs = get_input_manager().get_inputs();
+    for(int i = 0; i < inputs.size(); ++i)
+    {
+        _scene->add_point(inputs[i]);
+    }
+}
+
 void MainWindow::_init_cdt_display(const QVector<Triangle>& triangles)
 {
     int max_idx = 0;
@@ -240,14 +253,15 @@ void MainWindow::_draw_cdt(int idx)
         {
             int idx1 = i;
             int idx2 = i + 1;
-            if(3 <= idx)
+            if(3 <= idx2)
             {
                 idx2 = 0;
             }
-            if(points_group_idx[t.indices[idx1]] != points_group_idx[t.indices[idx2]])
+            if((points_group_idx[t.indices[idx1]] == idx) && (points_group_idx[t.indices[idx2]] == idx))
             {
-                _scene->addLine(QLineF(t.points[idx1], t.points[idx2]), QPen(QColor(Qt::gray)));
+                continue;
             }
+            _scene->addLine(QLineF(t.points[idx1], t.points[idx2]), QPen(QColor(Qt::gray)));
         }
     }
 }

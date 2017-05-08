@@ -29,6 +29,7 @@ private slots:
     void _convex_hull();
     void _cdt();
     void _decompose();
+    void _accomplish();
     void _zoom_in();
     void _zoom_out();
     void _zoom_fit();
@@ -38,6 +39,7 @@ private:
     void _create_actions();
     void _create_menus();
     void _connect_panel();
+    void _draw_input();
     void _init_cdt_display(const QVector<Triangle>& triangles);
     void _draw_cdt(int idx);
     void _draw_triangle(const Triangle& t, const QPen& pen);

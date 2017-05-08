@@ -124,6 +124,11 @@ void CDTManager::_set_lines_by_edges(const triangulateio& io)
 void CDTManager::_set_triangles(const triangulateio& io)
 {
     _triangles.clear();
+    int max_idx = 0;
+    for(int i = 0; i < _points_group_idx.size(); ++i)
+    {
+        max_idx = std::max(max_idx, _points_group_idx[i]);
+    }
     for (int i = 0; i < io.numberoftriangles; i++)
     {
         Triangle t;
@@ -138,7 +143,7 @@ void CDTManager::_set_triangles(const triangulateio& io)
         {
             t.neighbors[j] = io.neighborlist[i * 3 + j];
         }
-        t.idx = std::numeric_limits<int>::max();
+        t.idx = max_idx;
         for(int i = 0; i < 3; ++i)
         {
             if(_points_group_idx[t.indices[i]] < 0)
