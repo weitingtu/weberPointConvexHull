@@ -4,6 +4,7 @@
 #include <QStack>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 ConvexHullManager::ConvexHullManager(QObject *parent):
     QObject(parent),
