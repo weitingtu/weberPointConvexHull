@@ -4,6 +4,7 @@
 #include <QSpinBox>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QComboBox>
 
 Panel::Panel(QWidget *parent) : QWidget(parent),
     _font_size(new QSpinBox(this)),
@@ -14,12 +15,18 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _convex_hull(new QPushButton(tr("&ConvexHull"), this)),
     _cdt(new QPushButton(tr("&DT"), this)),
     _decompose(new QPushButton(tr("&Decompose"), this)),
-    _accomplish(new QPushButton(tr("&Accomplish"), this))
+    _accomplish(new QPushButton(tr("&Accomplish"), this)),
+    _difference(new QComboBox(this))
 {
     _font_size->setValue(9);
     _input_size->setMinimum(0);
     _input_size->setMaximum(2000);
     _input_size->setValue(100);
+    _difference->addItem("1%",      0.01);
+    _difference->addItem("0.1%",    0.001);
+    _difference->addItem("0.01%",   0.0001);
+    _difference->addItem("0.001%",  0.00001);
+    _difference->addItem("0.0001%", 0.000001);
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox->addWidget(_font_size);
     vbox->addWidget(_clear);
@@ -29,6 +36,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_cdt);
     vbox->addWidget(_decompose);
     vbox->addWidget(_accomplish);
+    vbox->addWidget(_difference);
     vbox->addStretch(1);
     setLayout(vbox);
 }

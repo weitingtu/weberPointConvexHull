@@ -16,6 +16,7 @@
 #include <QPen>
 #include <QMessageBox>
 #include <QSpinBox>
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
@@ -178,6 +179,7 @@ void MainWindow::_cdt()
                                   get_input_manager().get_inputs() + get_input_manager().get_hexs(),
                                   get_convex_hull_manager().get_points_group_idx(),
                                   get_cdt_manager().get_triangles());
+    get_decomposition().set_difference(_panel->get_difference_button()->currentData().toDouble());
     get_decomposition().initialize();
     if(get_decomposition().is_valid())
     {
@@ -203,7 +205,9 @@ void MainWindow::_decompose()
 
     if(get_decomposition().is_finish())
     {
-        QString msg = QString("Finish");
+        QString msg = QString("Finish\n Smallest Weber distance: %1\nSecond small Weber distance: %2")
+                .arg(QString::number(get_decomposition().get_smallest_weight()))
+                .arg(QString::number(get_decomposition().get_second_smallest_weight()));
         QMessageBox::information(this, QString(), msg);
         return;
     }

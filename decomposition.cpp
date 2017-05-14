@@ -8,6 +8,9 @@ Decomposition::Decomposition(QObject *parent) : QObject(parent),
     _triangles(),
     _candidate_idx(),
     _target_idx(-1),
+    _difference(0.000001),
+    _second_smallest_weight(0.0),
+    _smallest_weight(0.0),
     _finish(false)
 {
 }
@@ -29,6 +32,8 @@ void Decomposition::set_input(const QVector<QPointF>& i, const QVector<QPointF>&
     _triangles = t;
     _candidate_idx.clear();
     _target_idx = -1;
+    _second_smallest_weight = 0.0;
+    _smallest_weight = 0.0;
     _finish = false;
 }
 
@@ -73,6 +78,8 @@ void Decomposition::clear()
     _triangles.clear();
     _candidate_idx.clear();
     _target_idx = -1;
+    _second_smallest_weight = 0.0;
+    _smallest_weight = 0.0;
     _finish = false;
 }
 
@@ -173,7 +180,7 @@ void Decomposition::decompose()
     _candidate_idx.push_back(_triangles.size() - 1);
     int idx       = _target_idx;
     double weight = t.weight;
-    double threshold = 0.000001 * weight;
+    double threshold = _difference * weight;
     for(int i = _triangles.size() - 3;i <_triangles.size();++i)
     {
         if((_triangles[i].weight < weight) && ((weight - _triangles[i].weight) > threshold))
@@ -186,6 +193,12 @@ void Decomposition::decompose()
     if(idx == _target_idx)
     {
         _finish = true;
+        _smallest_weight = weight;
+        _second_smallest_weight = std::numeric_limits<double>::max();
+        for(int i = _triangles.size() - 3;i <_triangles.size();++i)
+        {
+            _second_smallest_weight = std::min(_second_smallest_weight, _triangles[i].weight);
+        }
     }
     else
     {

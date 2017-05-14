@@ -17,6 +17,7 @@ public:
     }
 
     void set_input(const QVector<QPointF>& i, const QVector<QPointF>& p, const QVector<int>& idx, const QVector<Triangle>& t);
+    void set_difference(double d) { _difference = d; }
     void initialize();
     void decompose();
     void clear();
@@ -26,6 +27,8 @@ public:
     const Triangle& get_triangle() const { return _triangles[_target_idx]; }
     int get_candidate_size() const { return _candidate_idx.size(); }
     const Triangle& get_candidate_triangle(int idx) const { return _triangles[_candidate_idx[idx]]; }
+    double get_smallest_weight() const { return _smallest_weight; }
+    double get_second_smallest_weight() const { return _second_smallest_weight; }
 signals:
 
 public slots:
@@ -43,6 +46,9 @@ private:
     QVector<Triangle> _triangles;
     QVector<int>      _candidate_idx;
     int               _target_idx;
+    double            _difference;
+    double            _second_smallest_weight;
+    double            _smallest_weight;
     bool              _finish;
 };
 

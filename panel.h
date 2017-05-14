@@ -7,6 +7,7 @@
 class QPushButton;
 class QSpinBox;
 class QGroupBox;
+class QComboBox;
 
 class Panel : public QWidget
 {
@@ -23,6 +24,7 @@ public:
     QPushButton* get_cdt_button() const { return _cdt; }
     QPushButton* get_decompose_button() const { return _decompose; }
     QPushButton* get_accomplish_button() const { return _accomplish; }
+    QComboBox*   get_difference_button() const { return _difference; }
 
 signals:
     void mode_changed(MODE m) const;
@@ -43,6 +45,7 @@ private:
     QPushButton* _cdt;
     QPushButton* _decompose;
     QPushButton* _accomplish;
+    QComboBox*   _difference;
 };
 
 #endif // PANEL_H
