@@ -338,8 +338,8 @@ bool ConvexHullManager::_is_colinear(const QPointF& p1, const QPointF& p2, const
     {
         return false;
     }
-    if((p.x() == p1.x() && p.x() == p2.x())
-       ||(p.y() == p1.y() && p.y() == p2.y()))
+    if((std::fabs(p.x() - p1.x()) < 0.0001 && std::fabs(p.x() - p2.x()) < 0.0001)
+       ||(std::fabs(p.y() - p1.y()) < 0.0001 && std::fabs(p.y() - p2.y()) <0.0001))
     {
         return true;
     }
