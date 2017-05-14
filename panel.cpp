@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QComboBox>
+#include <QLabel>
 
 Panel::Panel(QWidget *parent) : QWidget(parent),
     _font_size(new QSpinBox(this)),
@@ -36,6 +37,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_cdt);
     vbox->addWidget(_decompose);
     vbox->addWidget(_accomplish);
+    vbox->addWidget(new QLabel(tr("Difference"), this));
     vbox->addWidget(_difference);
     vbox->addStretch(1);
     setLayout(vbox);
