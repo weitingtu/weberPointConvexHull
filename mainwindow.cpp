@@ -205,7 +205,7 @@ void MainWindow::_decompose()
 
     if(get_decomposition().is_finish())
     {
-        QString msg = QString("Finish\nSmallest Weber distance: %1\nThe second small Weber distance: %2")
+        QString msg = QString("Finish\nThe smallest Weber distance: %1\nThe second small Weber distance: %2")
                 .arg(QString::number(get_decomposition().get_smallest_weight()))
                 .arg(QString::number(get_decomposition().get_second_smallest_weight()));
         QMessageBox::information(this, QString(), msg);
