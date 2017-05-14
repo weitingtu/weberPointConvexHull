@@ -28,6 +28,8 @@ private:
     explicit ConvexHullManager(QObject *parent = 0);
 
 private:
+    bool _is_colinear(const QPointF& p1, const QPointF& p2, const QPointF& p) const;
+    void _process_colinear(QVector<int> &hull_idx);
 
     QVector<QPointF>           _points;
     QVector<int>               _points_group_idx;

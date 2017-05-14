@@ -328,6 +328,55 @@ QVector<Point> _andrew_monotone_chain_convex_hull_wrapper(const QVector<QPointF>
 
 }
 
+bool ConvexHullManager::_is_colinear(const QPointF& p1, const QPointF& p2, const QPointF& p) const
+{
+    if((p.x() < p1.x() && p.x() < p2.x())
+       || (p.x() > p1.x() && p.x() > p2.x())
+       || (p.y() < p1.y() && p.y() < p2.y())
+       || (p.y() > p1.y() && p.y() > p2.y()))
+    {
+        return false;
+    }
+    if((p.x() == p1.x() && p.x() == p2.x())
+       ||(p.y() == p1.y() && p.y() == p2.y()))
+    {
+        return true;
+    }
+    return false;
+}
+
+void ConvexHullManager::_process_colinear(QVector<int>& hull_idx)
+{
+    QVector<QPointF> convex_hull;
+    QVector<int>     convex_hull_idx;
+    for(int i = 0; i < _convex_hull.size(); ++i)
+    {
+        int idx1 = i;
+        int idx2 = i + 1;
+        convex_hull.push_back(_convex_hull[idx1]);
+        convex_hull_idx.push_back(hull_idx[idx1]);
+        if(idx2 == _convex_hull.size())
+        {
+            idx2 = 0;
+        }
+        for(int j = 0; j < _points.size(); ++j)
+        {
+            if(_points_group_idx[j] >=0 )
+            {
+                continue;
+            }
+            if(_is_colinear(_convex_hull[idx1], _convex_hull[idx2], _points[j]))
+            {
+                _points_group_idx[j] = _group.size();
+                convex_hull.push_back(_points[j]);
+                convex_hull_idx.push_back(j);
+            }
+        }
+    }
+    _convex_hull = convex_hull;
+    hull_idx     = convex_hull_idx;
+}
+
 void ConvexHullManager::convex_hull()
 {
     QVector<Point> hull = _andrew_monotone_chain_convex_hull_wrapper(_points, _points_group_idx);
@@ -339,6 +388,7 @@ void ConvexHullManager::convex_hull()
         _convex_hull.push_back(QPointF(hull[i].x, hull[i].y));
         hull_idx.push_back(hull[i].idx);
     }
+    _process_colinear(hull_idx);
     _group.push_back(_convex_hull);
     _group_idx.push_back(hull_idx);
 }
