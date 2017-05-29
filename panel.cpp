@@ -14,6 +14,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _generate(new QPushButton(tr("&Generate"), this)),
     _hexagonal(new QPushButton(tr("&Hexagonal"), this)),
     _convex_hull(new QPushButton(tr("&ConvexHull"), this)),
+    _convex_hull_auto(new QPushButton(tr("&ConvexHull Auto"), this)),
     _cdt(new QPushButton(tr("&DT"), this)),
     _decompose(new QPushButton(tr("&Decompose"), this)),
     _accomplish(new QPushButton(tr("&Accomplish"), this)),
@@ -34,6 +35,7 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_createInputGroup());
     vbox->addWidget(_hexagonal);
     vbox->addWidget(_convex_hull);
+    vbox->addWidget(_convex_hull_auto);
     vbox->addWidget(_cdt);
     vbox->addWidget(_decompose);
     vbox->addWidget(_accomplish);

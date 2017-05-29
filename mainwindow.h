@@ -27,7 +27,8 @@ private slots:
     void _clear();
     void _generate();
     void _hexagoanl();
-    void _convex_hull();
+    bool _convex_hull();
+    void _convex_hull_auto();
     void _cdt();
     void _decompose();
     void _accomplish();

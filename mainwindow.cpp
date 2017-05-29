@@ -99,6 +99,7 @@ void MainWindow::_connect_panel()
     connect(_panel->get_generate_button(), SIGNAL(clicked(bool)), this, SLOT(_generate()));
     connect(_panel->get_hex_button(), SIGNAL(clicked(bool)), this, SLOT(_hexagoanl()));
     connect(_panel->get_convex_hull_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull()));
+    connect(_panel->get_convex_hull_auto_button(), SIGNAL(clicked(bool)), this, SLOT(_convex_hull_auto()));
     connect(_panel->get_cdt_button(), SIGNAL(clicked(bool)), this, SLOT(_cdt()));
     connect(_panel->get_decompose_button(), SIGNAL(clicked(bool)), this, SLOT(_decompose()));
     connect(_panel->get_accomplish_button(), SIGNAL(clicked(bool)), this, SLOT(_accomplish()));
@@ -142,14 +143,14 @@ void MainWindow::_hexagoanl()
     get_convex_hull_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
 }
 
-void MainWindow::_convex_hull()
+bool MainWindow::_convex_hull()
 {
     static int count = 0;
     get_convex_hull_manager().convex_hull();
     QVector<QPointF> convex_hull = get_convex_hull_manager().get_convex_hull();
     if(convex_hull.empty())
     {
-        return;
+        return false;
     }
     convex_hull.push_back(convex_hull.first());
     for(int i = 0; i < convex_hull.size() - 1; ++i)
@@ -165,6 +166,14 @@ void MainWindow::_convex_hull()
         _scene->addLine(QLineF(convex_hull[i], convex_hull[i + 1]));
     }
     ++count;
+    return true;
+}
+
+void MainWindow::_convex_hull_auto()
+{
+    while(_convex_hull())
+    {
+    }
 }
 
 void MainWindow::_cdt()

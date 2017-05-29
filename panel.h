@@ -21,6 +21,7 @@ public:
     QPushButton* get_generate_button() const { return _generate; }
     QPushButton* get_hex_button() const { return _hexagonal; }
     QPushButton* get_convex_hull_button() const { return _convex_hull; }
+    QPushButton* get_convex_hull_auto_button() const { return _convex_hull_auto; }
     QPushButton* get_cdt_button() const { return _cdt; }
     QPushButton* get_decompose_button() const { return _decompose; }
     QPushButton* get_accomplish_button() const { return _accomplish; }
@@ -42,6 +43,7 @@ private:
     QPushButton* _generate;
     QPushButton* _hexagonal;
     QPushButton* _convex_hull;
+    QPushButton* _convex_hull_auto;
     QPushButton* _cdt;
     QPushButton* _decompose;
     QPushButton* _accomplish;
