@@ -67,6 +67,8 @@ void Decomposition::initialize()
     {
         _candidate_idx.remove(_candidate_idx.indexOf(idx));
         _target_idx = idx;
+        _smallest_weight = min_weight;
+        _second_smallest_weight = min_weight;
     }
 }
 
@@ -194,15 +196,21 @@ void Decomposition::decompose()
     {
         _finish = true;
         _smallest_weight = weight;
-        _second_smallest_weight = std::numeric_limits<double>::max();
+//        _second_smallest_weight = std::numeric_limits<double>::max();
+//        _second_smallest_weight = t.weight;
         for(int i = _triangles.size() - 3;i <_triangles.size();++i)
         {
-            _second_smallest_weight = std::min(_second_smallest_weight, _triangles[i].weight);
+            if(_triangles[i].weight > _smallest_weight)
+            {
+                _second_smallest_weight = std::min(_second_smallest_weight, _triangles[i].weight);
+            }
         }
     }
     else
     {
         _candidate_idx.remove(_candidate_idx.indexOf(idx));
         _target_idx = idx;
+        _second_smallest_weight = _smallest_weight;
+        _smallest_weight = weight;
     }
 }
