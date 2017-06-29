@@ -17,6 +17,7 @@
 #include <QMessageBox>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QTime>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _file_menu(nullptr),
@@ -30,7 +31,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     _view(new QGraphicsView(_scene, this)),
     _panel(new Panel(this)),
     _dock(new QDockWidget(tr("Control Panel"), this)),
-    _cdt_display()
+    _cdt_display(),
+    _con_secs(0),
+    _dec_secs(0),
+    _total_secs(0)
 {
     setCentralWidget(_view);
     _create_dock_widget();
@@ -121,6 +125,14 @@ void MainWindow::_clear()
     get_convex_hull_manager().clear();
     get_cdt_manager().clear();
     get_decomposition().clear();
+    _con_secs   = 0;
+    _dec_secs   = 0;
+    _total_secs = 0;
+    _panel->set_hex_secs(0);
+    _panel->set_con_secs(0);
+    _panel->set_cdt_secs(0);
+    _panel->set_dec_secs(0);
+    _panel->set_total_secs(0);
 }
 
 void MainWindow::_generate()
@@ -132,7 +144,13 @@ void MainWindow::_generate()
 
 void MainWindow::_hexagoanl()
 {
+    QTime timer;
+    timer.start();
     get_input_manager().hexagonal();
+    int ms = timer.elapsed();
+    _total_secs += ms;
+    _panel->set_hex_secs(ms);
+    _panel->set_total_secs(_total_secs);
     _scene->addRect(get_input_manager().get_boundary(), QPen(Qt::red, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
     const QVector<QPointF>& hexs = get_input_manager().get_hexs();
     for(int i = 0; i < hexs.size(); ++i)
@@ -145,8 +163,15 @@ void MainWindow::_hexagoanl()
 
 bool MainWindow::_convex_hull()
 {
+    QTime timer;
+    timer.start();
     static int count = 0;
     get_convex_hull_manager().convex_hull();
+    int ms = timer.elapsed();
+    _con_secs += ms;
+    _total_secs += ms;
+    _panel->set_con_secs(_con_secs);
+    _panel->set_total_secs(_total_secs);
     QVector<QPointF> convex_hull = get_convex_hull_manager().get_convex_hull();
     if(convex_hull.empty())
     {
@@ -182,7 +207,14 @@ void MainWindow::_cdt()
     get_cdt_manager().set_points(get_input_manager().get_inputs() + get_input_manager().get_hexs());
     get_cdt_manager().set_points_group_idx(get_convex_hull_manager().get_points_group_idx());
     get_cdt_manager().set_group_idx(get_convex_hull_manager().get_group_idx());
+    QTime timer;
+    timer.start();
     get_cdt_manager().cdt();
+    int ms = timer.elapsed();
+    _total_secs += ms;
+    _panel->set_cdt_secs(ms);
+    _panel->set_total_secs(_total_secs);
+    QVector<QPointF> convex_hull = get_convex_hull_manager().get_convex_hull();
     _init_cdt_display(get_cdt_manager().get_triangles());
     get_decomposition().set_input(get_input_manager().get_inputs(),
                                   get_input_manager().get_inputs() + get_input_manager().get_hexs(),
@@ -210,7 +242,14 @@ void MainWindow::_decompose()
 
     const Triangle& prev_t = get_decomposition().get_triangle();
 
+    QTime timer;
+    timer.start();
     get_decomposition().decompose();
+    int ms = timer.elapsed();
+    _dec_secs += ms;
+    _total_secs += ms;
+    _panel->set_dec_secs(_dec_secs);
+    _panel->set_total_secs(_total_secs);
 
     if(get_decomposition().is_finish())
     {

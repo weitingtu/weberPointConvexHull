@@ -58,6 +58,9 @@ private:
     Panel*          _panel;
     QDockWidget*    _dock;
     QVector<bool>   _cdt_display;
+    int _con_secs;
+    int _dec_secs;
+    int _total_secs;
 };
 
 #endif // MAINWINDOW_H

@@ -18,7 +18,12 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     _cdt(new QPushButton(tr("&DT"), this)),
     _decompose(new QPushButton(tr("&Decompose"), this)),
     _accomplish(new QPushButton(tr("&Accomplish"), this)),
-    _difference(new QComboBox(this))
+    _difference(new QComboBox(this)),
+    _hex_secs(new QLabel("0 ms", this)),
+    _con_secs(new QLabel("0 ms", this)),
+    _cdt_secs(new QLabel("0 ms", this)),
+    _dec_secs(new QLabel("0 ms", this)),
+    _total_secs(new QLabel("0 ms", this))
 {
     _font_size->setValue(9);
     _input_size->setMinimum(0);
@@ -34,10 +39,15 @@ Panel::Panel(QWidget *parent) : QWidget(parent),
     vbox->addWidget(_clear);
     vbox->addWidget(_createInputGroup());
     vbox->addWidget(_hexagonal);
+    vbox->addWidget(_hex_secs);
     vbox->addWidget(_convex_hull);
     vbox->addWidget(_convex_hull_auto);
+    vbox->addWidget(_con_secs);
     vbox->addWidget(_cdt);
+    vbox->addWidget(_cdt_secs);
     vbox->addWidget(_decompose);
+    vbox->addWidget(_dec_secs);
+    vbox->addWidget(_total_secs);
     vbox->addWidget(_accomplish);
     vbox->addWidget(new QLabel(tr("Difference"), this));
     vbox->addWidget(_difference);

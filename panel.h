@@ -2,6 +2,7 @@
 #define PANEL_H
 
 #include <QWidget>
+#include <QLabel>
 #include "enum.h"
 
 class QPushButton;
@@ -27,6 +28,12 @@ public:
     QPushButton* get_accomplish_button() const { return _accomplish; }
     QComboBox*   get_difference_button() const { return _difference; }
 
+    void set_hex_secs(int s) const { _hex_secs->setText(QString::number(s) + " ms");}
+    void set_con_secs(int s) const { _con_secs->setText(QString::number(s) + " ms");}
+    void set_cdt_secs(int s) const { _cdt_secs->setText(QString::number(s) + " ms");}
+    void set_dec_secs(int s) const { _dec_secs->setText(QString::number(s) + " ms");}
+    void set_total_secs(int s) const { _total_secs->setText(QString::number(s) + " ms");}
+
 signals:
     void mode_changed(MODE m) const;
 
@@ -48,6 +55,11 @@ private:
     QPushButton* _decompose;
     QPushButton* _accomplish;
     QComboBox*   _difference;
+    QLabel*      _hex_secs;
+    QLabel*      _con_secs;
+    QLabel*      _cdt_secs;
+    QLabel*      _dec_secs;
+    QLabel*      _total_secs;
 };
 
 #endif // PANEL_H
